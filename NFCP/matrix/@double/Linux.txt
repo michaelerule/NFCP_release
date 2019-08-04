@@ -1,0 +1,78 @@
+
+                           Optimized MATLAB toolbox
+           ________________________________________________________
+
+                    Elementary functions: Linux (x86) port
+           ________________________________________________________
+
+
+	DISCLAIMER: This document only deals with the Linux related specifics
+	of this software package. Please refer to "Readme.txt" for any other
+	information including non-warranty, license and installation.
+
+
+** Contents
+
+	1. Introduction
+	2. Requirements
+	3. Compatibility
+	4. Trademarks
+
+** Original publisher
+
+	Marcel Leutenegger		marcel.leutenegger@epfl.ch
+	EPFL - STI - LOB
+	Bâtiment BM 5.143		Tel:	+41 21 693 77 37
+	CH-1015 Lausanne
+
+** x86 Linux port by
+
+	Stefan Roth
+
+	Brown University		roth@cs.brown.edu
+	Dept. of Computer Science
+	Box 1910			Tel:	 +1 401 863 7665
+	Providence, RI, USA 02912
+
+
+
+1. Introduction
+
+	This package contains binaries of a Linux port of Marcel Leutenegger's
+	performance enhanced elementary MATLAB functions. Since these functions
+	are implemented in architecture specific assembly language, they only
+	work on x86-based Linux systems. Thanks to MATLAB's mostly platform
+	independent way of dealing with MEX functions, these primitives can
+	and should be installed and used in the way that is described in the
+	"Readme.txt" file.
+
+
+2. Requirements
+
+	• An x86-based Linux system with an Intel Pentium II class (or better)
+	  processor.
+	• MATLAB R13 build 6.5.0.180913a or newer.
+
+
+3. Compatibility
+
+	These functions have been compiled using GCC version 3.3.4 on a GLIBC
+	2.3 based system. I sucessfully tested their functionality on a recent
+	Debian (testing) and a recent Gentoo (2004.1) system. However, I know
+	that certain binaries that were compiled on GLIBC 2.3 based systems do
+	not run on systems with older versions of this library. Since I don't
+	have access to any such Linux system, I cannot verify whether this is
+	the case for the MEX functions provided here.
+
+
+4. Trademarks
+
+	MATLAB is a registered trademark of The MathWorks, Inc. Linux is a
+	registered trademark of Linus Torvalds. Pentium II is a registered
+	trademark of Intel Corporation. Other product or brand names are
+	trademarks or registered trademarks of their respective holders.
+
+		________________________________________________________
+
+			    Site map • EPFL © 2004, Lausanne
+				Webmaster • 20/6/2004
