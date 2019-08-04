@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.nearestPositivePoint  &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="util.outer " href="util.outer.html" />
+    <link rel="prev" title="util.functional_macros " href="util.functional_macros.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="NFCP_init.html">NFCP_init </a></li>
+<li class="toctree-l1"><a class="reference internal" href="assertFilterStability.html">assertFilterStability </a></li>
+<li class="toctree-l1"><a class="reference internal" href="covarianceUpdate.html">covarianceUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="excitatoryRate.html">excitatoryRate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdate.html">filteringUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdateCovariance.html">filteringUpdateCovariance </a></li>
+<li class="toctree-l1"><a class="reference internal" href="initializeModel.html">initializeModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="jacobian.html">jacobian </a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meanUpdate.html">meanUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="noiseModel.html">noiseModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateInfer.html">stateInfer </a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateSample.html">stateSample </a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="util.html">util package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="util.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="util.applyOptions.html">util.applyOptions </a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.cachedinvoke.html">util.cachedinvoke </a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.centerfig.html">util.centerfig </a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.dataHash.html">util.dataHash </a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.functional_macros.html">util.functional_macros </a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">util.nearestPositivePoint </a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.outer.html">util.outer </a></li>
+<li class="toctree-l3"><a class="reference internal" href="util.pointsToHistogram.html">util.pointsToHistogram </a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#-util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="util.html">util package</a> &raquo;</li>
+        
+      <li>util.nearestPositivePoint </li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/util.nearestPositivePoint.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="-util.nearestPositivePoint">
+<span id="util-nearestpositivepoint-"></span><h1>util.nearestPositivePoint <a class="headerlink" href="#-util.nearestPositivePoint" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="util.nearestPositivePoint.nearestPositivePoint">
+<code class="descclassname">util.nearestPositivePoint.</code><code class="descname">nearestPositivePoint</code><span class="sig-paren">(</span><em>x0</em>, <em>P</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/nearestPositivePoint.html#nearestPositivePoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.nearestPositivePoint.nearestPositivePoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function nearestPositivePoint finds a point <cite>x</cite> based on the
+multivariate Gaussian with mean <cite>x0</cite> and precision <cite>P</cite> such that
+<cite>x</cite> is the most probably point such that all entries in <cite>x</cite> are
+positive.</p>
+<p>This is done using quadratic programming.</p>
+<p>First, we transform into a coordinate system where Euclidian distance
+reflects distance in probability.</p>
+<p>Then, we re-code the positivity constraint as a collection of
+constraints in this tranformed space, building an open simplex.</p>
+<p>x &gt; 0</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="util.outer.html" class="btn btn-neutral float-right" title="util.outer " accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="util.functional_macros.html" class="btn btn-neutral" title="util.functional_macros " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

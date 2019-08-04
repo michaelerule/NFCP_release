@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stateInfer  &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="stateSample " href="stateSample.html" />
+    <link rel="prev" title="output.printModel " href="output.printModel.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="NFCP_init.html">NFCP_init </a></li>
+<li class="toctree-l1"><a class="reference internal" href="assertFilterStability.html">assertFilterStability </a></li>
+<li class="toctree-l1"><a class="reference internal" href="covarianceUpdate.html">covarianceUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="excitatoryRate.html">excitatoryRate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdate.html">filteringUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdateCovariance.html">filteringUpdateCovariance </a></li>
+<li class="toctree-l1"><a class="reference internal" href="initializeModel.html">initializeModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="jacobian.html">jacobian </a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meanUpdate.html">meanUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="noiseModel.html">noiseModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">output package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">stateInfer </a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateSample.html">stateSample </a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>stateInfer </li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/stateInfer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="-stateInfer">
+<span id="stateinfer-"></span><h1>stateInfer <a class="headerlink" href="#-stateInfer" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="stateInfer.stateInfer">
+<code class="descclassname">stateInfer.</code><code class="descname">stateInfer</code><span class="sig-paren">(</span><em>ini</em>, <em>model</em>, <em>xydata</em>, <em>true_states</em>, <em>varargin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stateInfer.html#stateInfer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stateInfer.stateInfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infer latent states given point-process observations</p>
+<p>Note: “Surrogate” measurements: In the filtering algorithm, we use a
+multivariate Gaussian approximation for latent states. We estimate
+an approximate Gaussian posterior for the non-conjugate Poisson
+measurement updates. Estimating this approximation can be time
+consuming. Once an approximation is estimated, it is possible to
+divide out the Gaussian prior to generate a conjugate Gaussian
+“measurement” that has the same effect as the Poisson measurement.
+This Gaussian measurement can be re-used for nearby parameterizations,
+and is much faster than recomputing the approximation. We call these
+Gaussian measurements “surrogate” measurements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ini</strong> (<cite>array</cite>) – Initial mean intensities</li>
+<li><strong>model</strong> (<cite>struct</cite>) – pre-initialized model structure; see <cite>initializeModel</cite></li>
+<li><strong>true_states</strong> (<cite>cell</cite>, default <cite>false</cite>) – Ground-truth states (if avaialable). If not available, defaults
+to <cite>false</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>doplot</strong> (<cite>bool</cite>, default <cite>false</cite>) – Whether to plot states while filtering</li>
+<li><strong>save_figure</strong> (<cite>bool</cite>, default <cite>false</cite>) – Whether to save plots (if doplot is on) for animation</li>
+<li><strong>upscale</strong> (<cite>int</cite>, default 8) – Amount of upsampling to perform on shown arrays, if plotting is on.</li>
+<li><strong>skipinf</strong> (<cite>int</cite>, default 10) – Skip every <cite>skipinf</cite> (“skip-inferred”) frames if plotting is turned
+on.</li>
+<li><strong>showduration</strong> (<cite>int</cite>, default 200) – Total number of time-steps to plot (if plotting)</li>
+<li><strong>showmaxy</strong> (<cite>int</cite>, default 2) – Y-axis maximum for plotting inferred states</li>
+<li><strong>showprog</strong> (<cite>int</cite>, default false) – Whether to print debugging information for every frame</li>
+<li><strong>normll</strong> (<cite>bool</cite>, default true) – Whether to normalize log-likelihood by the number of data
+samples.</li>
+<li><strong>timeout</strong> (<cite>float</cite>, default -1) – If this is a positive number, monitor seconds elapsed and terminate
+the algorithm early if the runtime exceeds <cite>timeout</cite> seconds.
+Note: not supported yet</li>
+<li><strong>ratescale</strong> (<cite>float</cite>, default 1) – The latent A state will be multiplied by this value for display</li>
+<li><strong>peakactivity</strong> (<cite>bool</cite>, default false) – If true, plot the active state density at the location with
+the most activity, rather than the spatial average</li>
+<li><strong>mergeRstates</strong> (<cite>bool</cite>, default true) – Merge all refractory states when plotting</li>
+<li><strong>poolpoints</strong> (<cite>int</cite>, default 5) – Number of frames of point events to plot. Should not exceed
+the displayed frame rate specified by <cite>skipinf</cite></li>
+<li><strong>MarkerSize</strong> (<cite>int</cite>, default 3) – MarkerSize parameter forwarded to scatter for plotting point
+events</li>
+<li><strong>softmax</strong> (<em>bool, default true</em>) – If true, normalize the color-scheme to the peak value in each
+channels in plots.</li>
+<li><strong>opt.figure</strong> (<em>integer</em>) – Restore focus to this window before each plotting call.
+this is a workaround for a Matlab bug, wherein a user focus event
+can cause new plots to be drawn to the wrong figure.</li>
+<li><strong>iniP</strong> (<em>matrix</em>) – Optional initial conditions for correlation structure</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>llsum</strong> (<cite>float</cite> or <cite>vector</cite>) – Log-likelihood of data given model (up to a constant factor),
+summed over all timepoints. Depending on model configuration,
+the log-likelihood may be decomposed into several contributions,
+in which case a vector is returned.</li>
+<li><strong>infstate</strong> (<cite>cell</cite>, 1×Ntimes) – Cell array of mean intensity vectors over time. Each cell array
+contains a MN² by 1 matrix of pacted states, where M is the number
+of states (species), and N is the size of the N×N spatial basis,
+with N² basis elements total. Species are packed in order, with
+the spatial values packed in Matlab’s default (column major) order.</li>
+<li><strong>margvar</strong> (<cite>cell</cite>, 1×Ntimes) – Cell array of marginal variances for each state, location. This
+contains the marginal variances (for each spatial location
+and species). It is packed and organized similarly to the <cite>infstate</cite>
+variable that contains the mean concentrations. It corresponds
+to the diagonal of the covariance matrix.</li>
+<li><strong>infe</strong> (<cite>cell</cite>, 1×Ntimes) – Cell array of effective nonlocal excitation over time. It contains
+the local mean-excitation value at all timepoints. Each timepoint
+contains a N²x1 matrix. This reflects the total excitatory input
+into each spatial region at each timepoint, multiplied by the number
+or density of quiescent (Q) agents in that region.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stateInfer.verifyArguments">
+<code class="descclassname">stateInfer.</code><code class="descname">verifyArguments</code><span class="sig-paren">(</span><em>ini</em>, <em>model</em>, <em>xydata</em>, <em>true_states</em>, <em>opt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stateInfer.html#verifyArguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stateInfer.verifyArguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Argument verification</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stateInfer.getUpdateModel">
+<code class="descclassname">stateInfer.</code><code class="descname">getUpdateModel</code><span class="sig-paren">(</span><em>model</em>, <em>opt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stateInfer.html#getUpdateModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stateInfer.getUpdateModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Depending on which update is used,
+keep track of either the precision or covariance matrix</p>
+<p>Laplace update needs the precision matrix.</p>
+<p>Kalman update can use the covariance matrix directly, which has
+a faster update.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="stateSample.html" class="btn btn-neutral float-right" title="stateSample " accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="output.printModel.html" class="btn btn-neutral" title="output.printModel " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

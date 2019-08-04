@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>optimize.logLikelihood_debug &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>optimize.logLikelihood_debug</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for optimize.logLikelihood_debug</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<div class="viewcode-block" id="logLikelihood"><a class="viewcode-back" href="../../optimize.logLikelihood_debug.html#optimize.logLikelihood_debug.logLikelihood">[docs]</a><span class="k">def</span> <span class="nf">logLikelihood</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">ini</span><span class="p">,</span><span class="n">xydata</span><span class="p">,</span><span class="n">varargin</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+
+<span class="sd">    Debugging copy: return contributions to log-likelihood for</span>
+<span class="sd">    all time points to figure out what is wrong!</span>
+
+<span class="sd">    Log-likelihood function for neural-field cox-process. Wraps the</span>
+<span class="sd">    `stateInfer` function.</span>
+
+<span class="sd">    Peforms sanity checks on parameters and</span>
+<span class="sd">    returns a large negative value if the parameters are outside the</span>
+<span class="sd">    region for which filtering can accurately estimate the likelihood</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : `struct`</span>
+<span class="sd">        `model` struct; should be pre-initialized. See `initializeModel`.</span>
+<span class="sd">    ini : `vector`</span>
+<span class="sd">        Filtering initial conditions for the model state-space mean</span>
+<span class="sd">        concentration. (Initial covariance is set heuristically using</span>
+<span class="sd">        model parameters)</span>
+<span class="sd">    xydata : `cell`</span>
+<span class="sd">        Cell array of list of (x,y) points in [0,1]^2; the point-process</span>
+<span class="sd">        observations</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    errornll : `float`, default -1e60</span>
+<span class="sd">        Large negative likelihood value to return in the event that</span>
+<span class="sd">        filtering cannot be performed using the provided model parameters.</span>
+<span class="sd">    doplot : `bool`, default `false`</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Whether to plot states while filtering</span>
+<span class="sd">    save_figure : `bool`, default `false`</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Whether to save plots (if doplot is on) for animation</span>
+<span class="sd">    cache :  `bool`, default `false`</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Whether to store computed states and likelihood, to be retrieved</span>
+<span class="sd">        later if the function is called with the same model and dataset.</span>
+<span class="sd">        to avoid cache collisions, store in the model structure some</span>
+<span class="sd">        identifying information that indicates how xypoints and ini were</span>
+<span class="sd">        generated.</span>
+<span class="sd">    upscale : `int`, default 8</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Amount of upsampling to perform on shown arrays, if plotting is on.</span>
+<span class="sd">    skipinf : `int`, default 10</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Skip every `skipinf` (&quot;skip-inferred&quot;) frames if plotting is turned</span>
+<span class="sd">        on.</span>
+<span class="sd">    showduration : `int`, default 200</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Total number of time-steps to plot (if plotting)</span>
+<span class="sd">    showmaxy : `int`, default 2</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Y-axis maximum for plotting inferred states</span>
+<span class="sd">    showprog : `int`, default false</span>
+<span class="sd">        Option forwarded to `stateInfer`;</span>
+<span class="sd">        Whether to print debugging information for every frame</span>
+<span class="sd">    normll : `bool`, default true</span>
+<span class="sd">        Whether to normalize log-likelihood by the number of data</span>
+<span class="sd">        samples.</span>
+<span class="sd">    timeout : `float`, default -1</span>
+<span class="sd">        If this is a positive number, monitor seconds elapsed and terminate</span>
+<span class="sd">        the algorithm early if the runtime exceeds `timeout` seconds.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ll_total : `float`</span>
+<span class="sd">        log-likelihood of data given model (up to a constant factor)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    try</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        % override ll, use state only (no dynamics)</span>
+<span class="sd">        % This is a temporary debugging thing</span>
+<span class="sd">        % does not support under-dispersion correction</span>
+<span class="sd">        x = cell2mat(infstate);</span>
+<span class="sd">        A = max(0,real(x(model.nn+1:model.nn*2,1:end)));</span>
+<span class="sd">        volume = model.dt.*model.dx.*model.gain;</span>
+<span class="sd">        rate = bsxfun(@times,bsxfun(@plus,A,model.bias),volume);</span>
+<span class="sd">        for i=1:length(xydata),</span>
+<span class="sd">            x = pointsToHistogram(xydata{i},model.n,false,false);</span>
+<span class="sd">            %x = model.blur(x);</span>
+<span class="sd">            counts(1:model.nn,i) = x(:);</span>
+<span class="sd">        end</span>
+<span class="sd">        % Not quite a likelihood</span>
+<span class="sd">        ll_total = mean(mean(log(max(1e-9,rate)).*counts - rate));</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    catch e %e is an MException struct</span>
+<span class="sd">        printModel(model);</span>
+<span class="sd">        fprintf(2,&#39;ll=%0.4e\n&#39;,ll_total);</span>
+<span class="sd">        fprintf(2,&#39;Identifier:\n%s\n&#39;,e.identifier);</span>
+<span class="sd">        fprintf(2,&#39;Message:\n%s\n&#39;,e.message);</span>
+<span class="sd">        fprintf(2,&#39;%s\n&#39;,getReport(e,&#39;extended&#39;));</span>
+<span class="sd">        fprintf(2,&#39;Continuing, but returning large negative likelihood\n&#39;);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+
+<span class="sd">    %|===== PARAM ====|= VAL =|</span>
+<span class="sd">        &#39;doplot&#39;       ,false</span>
+<span class="sd">        &#39;save_figure&#39;  ,false</span>
+<span class="sd">        &#39;cache&#39;        ,false</span>
+<span class="sd">        &#39;upscale&#39;      ,8</span>
+<span class="sd">        &#39;skipinf&#39;      ,10</span>
+<span class="sd">        &#39;showduration&#39; ,200</span>
+<span class="sd">        &#39;showmaxy&#39;     ,55</span>
+<span class="sd">        &#39;showprog&#39;     ,false</span>
+<span class="sd">        &#39;errornll&#39;     ,-1e60</span>
+<span class="sd">        &#39;normll&#39;       ,true</span>
+<span class="sd">        &#39;timeout&#39;      ,-1</span>
+<span class="sd">        }, varargin);</span>
+
+<span class="sd">    % Safety level (model.safety)</span>
+<span class="sd">    %   0=unchecked</span>
+<span class="sd">    %   1=patch</span>
+<span class="sd">    %   2=patch and warn</span>
+<span class="sd">    %   3=abort</span>
+<span class="sd">    %</span>
+<span class="sd">    % Recommend safety level &gt; 0 when optimizing</span>
+<span class="sd">    % we want errors to be handled here rather than forward up to</span>
+<span class="sd">    % the optimization code (which may not print appropriate debugging</span>
+<span class="sd">    % information)</span>
+<span class="sd">    %</span>
+<span class="sd">    % Using safety = 3 will cause problematic parameter sets to hard-fail,</span>
+<span class="sd">    % potentially better than wasting CPU cycles trying to filter using</span>
+<span class="sd">    % numerically infeasible parameters</span>
+<span class="sd">    %model.safety = 2;</span>
+
+<span class="sd">    % Logging level (model.verbosity)</span>
+<span class="sd">    %   0=nothing</span>
+<span class="sd">    %   1=limited</span>
+<span class="sd">    %   2=verbose</span>
+<span class="sd">    %   3=very verbose</span>
+<span class="sd">    %model.verbosity = 0;</span>
+
+<span class="sd">    % Return large negative log-likehood in the event of unphysical</span>
+<span class="sd">    % parameters. This value is dithered to avoid singular matrices</span>
+<span class="sd">    % that can occur in the sparse GP code if too many points have</span>
+<span class="sd">    % the same likelihood.</span>
+
+<span class="sd">    %ll_total = options.errornll.*(1+(rand()-0.5)*0.1);</span>
+
+<span class="sd">    %ll_total={}</span>
+
+<span class="sd">    if any([model.linearRates(:)&#39; model.thr model.rAA model.dt]&lt;0),</span>
+<span class="sd">        printModel(model);</span>
+<span class="sd">        fprintf(2,&#39;ll=%0.4e\n&#39;,ll_total);</span>
+<span class="sd">        warning(&#39;Rates, thresholds, and time-steps should be non-negative&#39;);</span>
+<span class="sd">        %return;</span>
+<span class="sd">    end;</span>
+<span class="sd">    if any(model.dt.*[model.linearRates(:)&#39; model.rAA]&gt;0.5),</span>
+<span class="sd">        printModel(model);</span>
+<span class="sd">        fprintf(2,&#39;ll=%0.4e\n&#39;,ll_total);</span>
+<span class="sd">        warning(&#39;All rates should be slow relative to time-step model.dt&#39;);</span>
+<span class="sd">        %return;</span>
+<span class="sd">    end;</span>
+<span class="sd">        [ll_total,infstate,margvar,infe] = stateInfer_debug(ini,model,xydata,false,options);</span>
+<span class="sd">    %fprintf(1,&#39;ll=%0.4e\n&#39;,ll_total);</span>
+<span class="sd">    printModel(model);</span>
+<span class="sd">end</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

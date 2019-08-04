@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.dataHash &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>util.dataHash</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for util.dataHash</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<div class="viewcode-block" id="dataHash"><a class="viewcode-back" href="../../util.dataHash.html#util.dataHash.dataHash">[docs]</a><span class="k">def</span> <span class="nf">dataHash</span><span class="p">(</span><span class="n">Data</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Jan Simon&#39;s struct hash function</span>
+<span class="sd">    mathworks.com/matlabcentral/answers/3314-hash-function-for-matlab-struct</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Data : struct</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : hash value of data</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+<span class="sd">    Engine = java.security.MessageDigest.getInstance(&#39;MD5&#39;);</span>
+<span class="sd">    H = CoreHash(Data, Engine, 0);</span>
+<span class="sd">    H = sprintf(&#39;%.2x&#39;, H);   % To hex string</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+<div class="viewcode-block" id="CoreHash"><a class="viewcode-back" href="../../util.dataHash.html#util.dataHash.CoreHash">[docs]</a><span class="k">def</span> <span class="nf">CoreHash</span><span class="p">(</span><span class="n">Data</span><span class="p">,</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">recursion_depth</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Recursively walk through a `struct` and build a hash value.</span>
+<span class="sd">    Warning: this function appears to behave erratically in Matlab</span>
+<span class="sd">    versions older than r2017a; Have not identified the bug yet</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Data : any variable within the structure</span>
+<span class="sd">    Engine : Hashing engine</span>
+<span class="sd">    recursion_dept : recusion depth counter</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : hash value of data</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+<span class="sd">    if recursion_depth&gt;100000,</span>
+<span class="sd">        H = 0;</span>
+<span class="sd">        return</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Consider the type of empty arrays:</span>
+<span class="sd">    S = [class(Data), sprintf(&#39;%d &#39;, size(Data))];</span>
+<span class="sd">    Engine.update(typecast(uint16(S(:)), &#39;uint8&#39;));</span>
+<span class="sd">    H = double(typecast(Engine.digest, &#39;uint8&#39;));</span>
+<span class="sd">    if isa(Data, &#39;struct&#39;)</span>
+<span class="sd">        n = numel(Data);</span>
+<span class="sd">        if n == 1  % Scalar struct:</span>
+<span class="sd">           F = sort(fieldnames(Data));  % ignore order of fields</span>
+<span class="sd">           for iField = 1:length(F)</span>
+<span class="sd">              H = bitxor(H, CoreHash(Data.(F{iField}), Engine, recursion_depth+1));</span>
+<span class="sd">           end</span>
+<span class="sd">        else  % Struct array:</span>
+<span class="sd">           for iS = 1:n</span>
+<span class="sd">              H = bitxor(H, CoreHash(Data(iS), Engine, recursion_depth+1));</span>
+<span class="sd">           end</span>
+<span class="sd">        end</span>
+<span class="sd">    elseif isempty(Data)</span>
+<span class="sd">        % No further actions needed</span>
+<span class="sd">    elseif isnumeric(Data)</span>
+<span class="sd">        Data = full(Data); % no sparse arrays allowed</span>
+<span class="sd">        Engine.update(typecast(Data(:), &#39;uint8&#39;));</span>
+<span class="sd">        H = bitxor(H, double(typecast(Engine.digest, &#39;uint8&#39;)));</span>
+<span class="sd">    elseif ischar(Data)  % Silly TYPECAST cannot handle CHAR</span>
+<span class="sd">        Engine.update(typecast(uint16(Data(:)), &#39;uint8&#39;));</span>
+<span class="sd">        H = bitxor(H, double(typecast(Engine.digest, &#39;uint8&#39;)));</span>
+<span class="sd">    elseif iscell(Data)</span>
+<span class="sd">        for iS = 1:numel(Data)</span>
+<span class="sd">           H = bitxor(H, CoreHash(Data{iS}, Engine, recursion_depth+1));</span>
+<span class="sd">        end</span>
+<span class="sd">    elseif islogical(Data)</span>
+<span class="sd">        Engine.update(typecast(uint8(Data(:)), &#39;uint8&#39;));</span>
+<span class="sd">        H = bitxor(H, double(typecast(Engine.digest, &#39;uint8&#39;)));</span>
+<span class="sd">    elseif isa(Data, &#39;function_handle&#39;)</span>
+<span class="sd">        H = bitxor(H, CoreHash(functions(Data), Engine, recursion_depth+1));</span>
+<span class="sd">    else</span>
+<span class="sd">        warning([&#39;Type of variable not considered: &#39;, class(Data)]);</span>
+<span class="sd">    end</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

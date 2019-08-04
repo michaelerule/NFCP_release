@@ -1,0 +1,406 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>filteringUpdate &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>filteringUpdate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for filteringUpdate</h1><div class="highlight"><pre>
+<span></span><span class="ch"></span>
+<span class="c1"></span>
+<div class="viewcode-block" id="filteringUpdate"><a class="viewcode-back" href="../filteringUpdate.html#filteringUpdate.filteringUpdate">[docs]</a><span class="k">def</span> <span class="nf">filteringUpdate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">P</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Combined mean and covaraince update for filtering.</span>
+<span class="sd">    This operates on the precision matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model: struct</span>
+<span class="sd">        Pre-initialized model struct. See `initializeModel`.</span>
+<span class="sd">    M: vector</span>
+<span class="sd">        Means for intensities of states. The first states must represent</span>
+<span class="sd">        Quiescent (Q) neurons. The second states must represent actively</span>
+<span class="sd">        firing (A) neurons. The remaining states can implement arbitrary</span>
+<span class="sd">        linear dynamics (with Poisson noise).</span>
+<span class="sd">    P: matrix</span>
+<span class="sd">        Precision matrix; Optional if using LNA</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    M : vector</span>
+<span class="sd">        Updated state estiamte for mean intensities</span>
+<span class="sd">    P : matrix</span>
+<span class="sd">        Updated *precision* (inverse covariance) matrix.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sd"></span>
+
+<span class="sd">    assertMatrixCondition(P,model.safety);</span>
+<span class="sd">    N  = model.nn;</span>
+<span class="sd">    I  = model.diag;</span>
+<span class="sd">    K  = model.K2D;</span>
+<span class="sd">    rE = model.rAA;</span>
+<span class="sd">    dt = model.dt;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % MEAN UPDATE</span>
+
+<span class="sd">    % Locally linearize the system and solve forward using exponentiation</span>
+<span class="sd">    % This enforces neuron count conservation exactly. Local, linear</span>
+<span class="sd">    % reactions are time homogenous and the discrete-time forward operator</span>
+<span class="sd">    % can be computed in advance via exponentiation.</span>
+<span class="sd">    % The locally-linearize nonlinear excito-exctatory interaction</span>
+<span class="sd">    % is state-dependent and spatially inhomogenous.</span>
+<span class="sd">    % Integrating using exponentiation is not feasible. However, if</span>
+<span class="sd">    % the nonlinear reactions are integrated &quot;separately&quot;, then there is</span>
+<span class="sd">    % a quick closed-form for computing the conserved update.</span>
+<span class="sd">    %</span>
+<span class="sd">    % The linear forward operator includes time-step dt and is integrated</span>
+<span class="sd">    % exactly using exponentiation and saved with the model.</span>
+<span class="sd">    M  = model.FlinSpatial*M(:);</span>
+
+<span class="sd">    % Nonlinear reations are handled as a second integration step</span>
+<span class="sd">    %</span>
+<span class="sd">    % Implementation note:</span>
+<span class="sd">    %</span>
+<span class="sd">    % The first reaction channel is hard-coded to be Q-&gt;A, and should</span>
+<span class="sd">    % always be present. If this reaction is not needed, set the rate to</span>
+<span class="sd">    % zero.</span>
+<span class="sd">    Q  = M(1:N);</span>
+<span class="sd">    A  = M(N+1:N*2);</span>
+<span class="sd">    KA = K*A(:);</span>
+<span class="sd">    EINTERACT = KA.*Q(:);</span>
+
+<span class="sd">    % Moment closure and noise updates work on covariance, while</span>
+<span class="sd">    % measurement updates work on inverse covariance (precision)</span>
+<span class="sd">    % For improves stability for those matrix inverses, we compute a</span>
+<span class="sd">    % (regularized) cholesky factor of the precision matrix</span>
+<span class="sd">    chP = chol(P+I.*model.reg_precision);</span>
+
+<span class="sd">    % Moment closure calculates the expected &lt;Q(K*A)&gt; concentration</span>
+<span class="sd">    % Using the system covaraince matirx. This can be computed by</span>
+<span class="sd">    % considering projections of the system onto just the Q subspace</span>
+<span class="sd">    % and onto the KA subspace. The code below uses the cholesky factor</span>
+<span class="sd">    % of the precision matirx to simultaneously approximately invert</span>
+<span class="sd">    % the precision matrix and perform these projections.</span>
+<span class="sd">    if strcmp(model.method,&#39;momentClosure&#39;),</span>
+<span class="sd">        % Compute correlation effects based on mean intensities</span>
+<span class="sd">        % AFTER applying linear transition update. (The operators</span>
+<span class="sd">        % should be applied as a product, i.e. one-after-another)</span>
+<span class="sd">        chPKA = chP&#39;\model.getKA;</span>
+<span class="sd">        chPQ  = chP&#39;\model.getQ;</span>
+<span class="sd">        % The expression sum((chPKA.*chPQ),1) is a faster way of</span>
+<span class="sd">        % computing the diagonal diag(chPKA*chPQ)</span>
+<span class="sd">        EINTERACT = EINTERACT + sum((chPKA.*chPQ),1)&#39;;</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Multiply the &lt;QA&gt; interaction by the exctiation rate</span>
+<span class="sd">    ERATE = EINTERACT.*rE;</span>
+
+<span class="sd">    % For updating the means, we include a fixed threshold. The nonlinear</span>
+<span class="sd">    % reactions are locally linearized and converted to an effective rate</span>
+<span class="sd">    % which is then integrated forward using exponentiation, to enforce</span>
+<span class="sd">    % conservation of neuron numbers</span>
+<span class="sd">    rate  = ERATE./(Q(:)+model.minrate) - model.thr;</span>
+<span class="sd">    rate(rate&lt;0.0) = 0.0;</span>
+<span class="sd">    delta = (exp(-rate*dt)-1).*Q(:);</span>
+
+<span class="sd">    % Add excitatory changes to the new mean intensity</span>
+<span class="sd">    Q          = Q(:)+delta;</span>
+<span class="sd">    A          = A(:)-delta;</span>
+<span class="sd">    M(1:N)     = Q(:);</span>
+<span class="sd">    M(N+1:2*N) = A(:);</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % COVARIANCE UPDATE</span>
+
+<span class="sd">    % The covariance update requires the system Jacobian. The mean update</span>
+<span class="sd">    % requires strict conservation, but the covariance update is more</span>
+<span class="sd">    % tolerant: Euler integration can be used for speed. The contribution</span>
+<span class="sd">    % of linear, local, homogeneous state transitions to the jacobian</span>
+<span class="sd">    % is computed ahead of time and stored with the model as Jlin. Only</span>
+<span class="sd">    % the nonlocal, nonlinear contributions need to be computed on every</span>
+<span class="sd">    % time-step, and these are handled by local linearization.</span>
+<span class="sd">    se = (dt*rE);</span>
+
+<span class="sd">    % Recompute KA reflecting updated intensities</span>
+<span class="sd">    KA = K*A(:);</span>
+
+<span class="sd">    dQQ = diag(se.*KA);</span>
+<span class="sd">    dQA = bsxfun(@times,K&#39;,se.*Q&#39;)&#39;; %=diag(se.*Q)*K;</span>
+<span class="sd">    Jnonlin = zeros(model.dimension);</span>
+<span class="sd">    Jnonlin(1:2*N,1:2*N) = [-dQQ -dQA; dQQ dQA];</span>
+
+<span class="sd">    % The covariance update operates on the covariance, but the measurement</span>
+<span class="sd">    % update operates on the inverse covaraince (precision) matrix. The</span>
+<span class="sd">    % following lines take advantage of various numerical tricks to update</span>
+<span class="sd">    % the precision matrix without explicitly inverting it.</span>
+
+<span class="sd">    % See initializeModel:  model.IJlin = model.diag - model.Jlin;</span>
+<span class="sd">    RB = chP*(model.IJlin-Jnonlin);</span>
+<span class="sd">    RATES = model.FlinReactionSpatial*M(:);</span>
+
+<span class="sd">    % For efficiency, ERATE is taken from the concentrations after the</span>
+<span class="sd">    % linear update and prior to the excitatory update. This may lead</span>
+<span class="sd">    % to some errors, TODO check this.</span>
+<span class="sd">    RATES(1:N) = RATES(1:N) + ERATE;</span>
+
+<span class="sd">    % Scaling of the reaction noise RATES by the time step dt has been</span>
+<span class="sd">    % absorbed into the pre-computed factor `noiseCov`</span>
+<span class="sd">    S  = bsxfun(@times,model.noiseCov,sqrt(abs(RATES))&#39;);</span>
+
+<span class="sd">    % If excitation is too large, this expression will generate large</span>
+<span class="sd">    % eigenvalues making the precision matrix ill conditioned. Either</span>
+<span class="sd">    % S has too-small eigenvalues, or RB has too-large eigenvalues.</span>
+<span class="sd">    % S is related to the noise terms and, due to conservation, will be</span>
+<span class="sd">    % singular. RB is the culprit. It has a mix of large and small</span>
+<span class="sd">    % eigenvalues. The nonlinear contributions to the Jacobian affect</span>
+<span class="sd">    % only a subspace, and when they have a very different magnitude</span>
+<span class="sd">    % from the linear contributions, it causes RB to become ill-</span>
+<span class="sd">    % conditioned.</span>
+<span class="sd">    SQ = chol(I+RB*(S*S&#39;+model.reg)*RB&#39;)&#39;\RB;</span>
+<span class="sd">    if model.safety&gt;0,</span>
+<span class="sd">        if rcond(SQ)&lt;sqrt(eps),</span>
+<span class="sd">            SQ = SQ + model.reg_precision.*model.diag;</span>
+<span class="sd">            if model.safety&gt;1,</span>
+<span class="sd">                model.error(&#39;Precision matrix factor ill conditioned&#39;);</span>
+<span class="sd">            end</span>
+<span class="sd">        end</span>
+<span class="sd">        assertMatrixCondition(SQ,model.safety);</span>
+<span class="sd">    end</span>
+<span class="sd">    P = SQ&#39;*SQ;</span>
+
+<span class="sd">    % Constrain model if normalized flag is set such that densities</span>
+<span class="sd">    % sum to 1.</span>
+<span class="sd">    if model.normalized,</span>
+<span class="sd">        M       = reshape(M(:),model.nn,model.nstates);</span>
+<span class="sd">        total   = sum(M,2);</span>
+<span class="sd">        rescale = 1./total;</span>
+<span class="sd">        % Adjust means</span>
+<span class="sd">        rescale = kron(rescale,ones(1,model.nstates));</span>
+<span class="sd">        M = M.*rescale;</span>
+<span class="sd">        M = M(:);</span>
+<span class="sd">        % Adjust precision matrix to reflect rescaling</span>
+<span class="sd">        rescale = reshape(rescale,model.nn*model.nstates,1);</span>
+<span class="sd">        rescaleP = diag(1./rescale);</span>
+<span class="sd">        P = rescaleP * P * rescaleP;</span>
+<span class="sd">    end</span>
+
+<span class="sd">    assertMatrixCondition(P,model.safety);</span>
+
+
+
+
+
+
+
+
+</div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>optimize.coordinateSearch &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>optimize.coordinateSearch</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for optimize.coordinateSearch</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<div class="viewcode-block" id="coordinateSearch"><a class="viewcode-back" href="../../optimize.coordinateSearch.html#optimize.coordinateSearch.coordinateSearch">[docs]</a><span class="k">def</span> <span class="nf">coordinateSearch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">xydata</span><span class="p">,</span><span class="n">ini</span><span class="p">,</span><span class="n">LB</span><span class="p">,</span><span class="n">UB</span><span class="p">,</span><span class="n">NGRID</span><span class="p">,</span><span class="nb">set</span><span class="p">,</span><span class="n">varargin</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Search log-likelihood over a fixed range for a single model parameter.</span>
+
+<span class="sd">    An initial model, observations, and initial conditions should be</span>
+<span class="sd">    provided.</span>
+<span class="sd">    The lower bound (LB), upper bound (UB) and number of search points</span>
+<span class="sd">    (NGRID) should be specified.</span>
+<span class="sd">    A function `set` that accepts a parameter and returns a key,value pair</span>
+<span class="sd">    to set in the model should be provided.</span>
+<span class="sd">    For example set=@(s){&#39;sigma&#39;,s}.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : struct</span>
+<span class="sd">        pre-initialized model struct</span>
+<span class="sd">    xydata : cell</span>
+<span class="sd">        Point data</span>
+<span class="sd">    ini : matrix</span>
+<span class="sd">        initial conditions for mean concentratios</span>
+<span class="sd">    LB : float</span>
+<span class="sd">        search lower bound</span>
+<span class="sd">    UB : float</span>
+<span class="sd">        search upper bound</span>
+<span class="sd">    NGRID : int</span>
+<span class="sd">        number of search points</span>
+<span class="sd">    set : function</span>
+<span class="sd">        setter function, e.g. set=@(s){&#39;sigma&#39;,s}</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    cache :  `bool`, default `false`</span>
+<span class="sd">        Option forwarded to `stateInfer` via `modelLikelihood`;</span>
+<span class="sd">        Whether to store computed states and likelihood, to be retrieved</span>
+<span class="sd">        later if the function is called with the same model and dataset.</span>
+<span class="sd">        to avoid cache collisions, store in the model structure some</span>
+<span class="sd">        identifying information that indicates how xypoints and ini were</span>
+<span class="sd">        generated.</span>
+<span class="sd">    timeout : `float`, default 600</span>
+<span class="sd">        Option forwarded to `modelLikelihood`.</span>
+<span class="sd">        If this is a positive number, monitor seconds elapsed and terminate</span>
+<span class="sd">        the algorithm early if the runtime exceeds `timeout` seconds.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    model : struct</span>
+<span class="sd">        New model set to the best parameters found during search</span>
+<span class="sd">    scan : matrix</span>
+<span class="sd">        List of log10 parameter values searched</span>
+<span class="sd">    ll : matrix</span>
+<span class="sd">        List of normalized log-likelihood values at each parameter setting</span>
+<span class="sd">    best : float</span>
+<span class="sd">        Best parameter value found during search</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+<span class="sd">    %|===== PARAM ====|= VAL =|</span>
+<span class="sd">        &#39;timeout&#39;,600</span>
+<span class="sd">        &#39;cache&#39;,false</span>
+<span class="sd">        }, varargin);</span>
+
+<span class="sd">    functional_macros;</span>
+<span class="sd">    search2par = @(x) num2cell(10.^x);</span>
+<span class="sd">    par2search = @(x) any2mat(log10(x));</span>
+<span class="sd">    par2mod    = @(x) initializeModel(applyOptions(model,set(x)));</span>
+<span class="sd">    obj        = @(x) modelLikelihood(ini,apply(par2mod,search2par(x)),xydata,options);</span>
+<span class="sd">    LB         = par2search(LB);</span>
+<span class="sd">    UB         = par2search(UB);</span>
+<span class="sd">    scan       = linspace(LB,UB,NGRID);</span>
+<span class="sd">    ll         = zeros(NGRID,1);</span>
+<span class="sd">    parfor j=1:NGRID,</span>
+<span class="sd">        fprintf(1,&#39;Processing job %d of %d\n&#39;,j,NGRID);</span>
+<span class="sd">        ll(j) = obj(scan(j));</span>
+<span class="sd">    end</span>
+<span class="sd">    [~,i]  = max(ll);</span>
+<span class="sd">    best   = cellitem(search2par(scan(i)),1);</span>
+<span class="sd">    model  = par2mod(best);</span>
+<span class="sd">    fprintf(1,&#39;Best found is %0.4f\n&#39;,best);</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>optimize.modelLikelihood  &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="output package" href="output.html" />
+    <link rel="prev" title="optimize.logLikelihood_debug " href="optimize.logLikelihood_debug.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="NFCP_init.html">NFCP_init </a></li>
+<li class="toctree-l1"><a class="reference internal" href="assertFilterStability.html">assertFilterStability </a></li>
+<li class="toctree-l1"><a class="reference internal" href="covarianceUpdate.html">covarianceUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="excitatoryRate.html">excitatoryRate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdate.html">filteringUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdateCovariance.html">filteringUpdateCovariance </a></li>
+<li class="toctree-l1"><a class="reference internal" href="initializeModel.html">initializeModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="jacobian.html">jacobian </a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meanUpdate.html">meanUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="noiseModel.html">noiseModel </a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="optimize.html">optimize package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="optimize.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="optimize.coordinateSearch.html">optimize.coordinateSearch </a></li>
+<li class="toctree-l3"><a class="reference internal" href="optimize.logLikelihood_debug.html">optimize.logLikelihood_debug </a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">optimize.modelLikelihood </a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="optimize.html#-optimize">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateInfer.html">stateInfer </a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateSample.html">stateSample </a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="optimize.html">optimize package</a> &raquo;</li>
+        
+      <li>optimize.modelLikelihood </li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/optimize.modelLikelihood.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="-optimize.modelLikelihood">
+<span id="optimize-modellikelihood-"></span><h1>optimize.modelLikelihood <a class="headerlink" href="#-optimize.modelLikelihood" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="optimize.modelLikelihood.modelLikelihood">
+<code class="descclassname">optimize.modelLikelihood.</code><code class="descname">modelLikelihood</code><span class="sig-paren">(</span><em>model</em>, <em>ini</em>, <em>xydata</em>, <em>varargin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optimize/modelLikelihood.html#modelLikelihood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optimize.modelLikelihood.modelLikelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log-likelihood function for neural-field cox-process. Wraps the
+<cite>stateInfer</cite> function.</p>
+<p>Peforms sanity checks on parameters and
+returns a large negative value if the parameters are outside the
+region for which filtering can accurately estimate the likelihood</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model</strong> (<cite>struct</cite>) – <cite>model</cite> struct; should be pre-initialized. See <cite>initializeModel</cite>.</li>
+<li><strong>ini</strong> (<cite>vector</cite>) – Filtering initial conditions for the model state-space mean
+concentration. (Initial covariance is set heuristically using
+model parameters)</li>
+<li><strong>xydata</strong> (<cite>cell</cite>) – Cell array of list of (x,y) points in [0,1]^2; the point-process
+observations</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>errornll</strong> (<cite>float</cite>, default -1e60) – Large negative likelihood value to return in the event that
+filtering cannot be performed using the provided model parameters.</li>
+<li><strong>doplot</strong> (<cite>bool</cite>, default <cite>false</cite>) – Option forwarded to <cite>stateInfer</cite>;
+Whether to plot states while filtering</li>
+<li><strong>save_figure</strong> (<cite>bool</cite>, default <cite>false</cite>) – Option forwarded to <cite>stateInfer</cite>;
+Whether to save plots (if doplot is on) for animation</li>
+<li><strong>cache</strong> (<cite>bool</cite>, default <cite>false</cite>) – Option forwarded to <cite>stateInfer</cite>;
+Whether to store computed states and likelihood, to be retrieved
+later if the function is called with the same model and dataset.
+to avoid cache collisions, store in the model structure some
+identifying information that indicates how xypoints and ini were
+generated.</li>
+<li><strong>upscale</strong> (<cite>int</cite>, default 8) – Option forwarded to <cite>stateInfer</cite>;
+Amount of upsampling to perform on shown arrays, if plotting is on.</li>
+<li><strong>skipinf</strong> (<cite>int</cite>, default 10) – Option forwarded to <cite>stateInfer</cite>;
+Skip every <cite>skipinf</cite> (“skip-inferred”) frames if plotting is turned
+on.</li>
+<li><strong>showduration</strong> (<cite>int</cite>, default 200) – Option forwarded to <cite>stateInfer</cite>;
+Total number of time-steps to plot (if plotting)</li>
+<li><strong>showmaxy</strong> (<cite>int</cite>, default 2) – Option forwarded to <cite>stateInfer</cite>;
+Y-axis maximum for plotting inferred states</li>
+<li><strong>showprog</strong> (<cite>int</cite>, default false) – Option forwarded to <cite>stateInfer</cite>;
+Whether to print debugging information for every frame</li>
+<li><strong>normll</strong> (<cite>bool</cite>, default true) – Whether to normalize log-likelihood by the number of data
+samples.</li>
+<li><strong>timeout</strong> (<cite>float</cite>, default -1) – If this is a positive number, monitor seconds elapsed and terminate
+the algorithm early if the runtime exceeds <cite>timeout</cite> seconds.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ll_total</strong> – log-likelihood of data given model (up to a constant factor)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><cite>float</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="output.html" class="btn btn-neutral float-right" title="output package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="optimize.logLikelihood_debug.html" class="btn btn-neutral" title="optimize.logLikelihood_debug " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.outer &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>util.outer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for util.outer</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<div class="viewcode-block" id="outer"><a class="viewcode-back" href="../../util.outer.html#util.outer.outer">[docs]</a><span class="k">def</span> <span class="nf">outer</span><span class="p">(</span> <span class="n">vec</span><span class="p">,</span> <span class="n">varargin</span> <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    OUTER</span>
+
+<span class="sd">    A function to apply arbitrary function to &quot;cross-product&quot; of inputs</span>
+<span class="sd">    Concept based on the  R-language &#39;outer&#39; function.</span>
+<span class="sd">    copyright (C) 2012 by Carl Witthoft. Code may be be freely distributed</span>
+<span class="sd">    and incorporated into other functions, so long as it</span>
+<span class="sd">    is not part of any product which is sold.</span>
+
+<span class="sd">    USAGE: outer(vector1 [,vector2]  [, function] )</span>
+
+<span class="sd">    The optional &#39;function&#39; can be either a string, e.g., &#39;atan2,&#39; or a</span>
+<span class="sd">    function handle.</span>
+<span class="sd">    The function must accept two arguments and produce a vector of</span>
+<span class="sd">    results the length of the first input. There are a few cases, e.g.</span>
+<span class="sd">    f(x,y) = numel([ x y ]) which may succeed but these are not</span>
+<span class="sd">    guaranteed.</span>
+<span class="sd">    Examples:</span>
+
+<span class="sd">        outer(([1 2 3 4],5,&#39;plus&#39;)</span>
+<span class="sd">        outer({ &#39;a&#39; &#39;b&#39; &#39;c&#39; &#39;d&#39;} , &#39;c&#39;,&#39;strcmp&#39;)</span>
+<span class="sd">        foo = @atan2; outer([1:5],foo)</span>
+
+<span class="sd">    The default function is &quot;*&quot; , i.e. outer product of two numeric vectors.</span>
+<span class="sd">    If &#39;vec2&#39; is not supplied, &quot;function(vec,vec)&quot; is assumed.</span>
+<span class="sd">    Inputs can be vectors of numbers, vectors of characters, or cell vectors</span>
+<span class="sd">    of characters/char strings.</span>
+<span class="sd">    Note that &quot;*&quot; is illegal for characters, so if either vec or</span>
+<span class="sd">    vec2 is non-numeric, a function must be supplied.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+
+<span class="sd">    strop = &#39;*&#39;; %default value of function</span>
+<span class="sd">    vec2 = vec; % will overwrite later if vec2 is provided</span>
+<span class="sd">    if nargin==2</span>
+<span class="sd">        % if &quot;vec&quot; not number then it&#39;s string, so next arg MUST be function name</span>
+<span class="sd">         if ~isnumeric(vec)</span>
+<span class="sd">              strop = (varargin{1});</span>
+<span class="sd">              if (~iscell(vec))</span>
+<span class="sd">                   bb = textscan(num2str(vec),&#39;%s&#39;);</span>
+<span class="sd">                  vec=bb{1} ;</span>
+<span class="sd">                  vec2=vec;</span>
+<span class="sd">              end;</span>
+<span class="sd">          else % vec is number; next arg is either number or MUST be function name</span>
+<span class="sd">              if ~isnumeric(varargin{1})</span>
+<span class="sd">                  strop = (varargin{1});</span>
+<span class="sd">              else</span>
+<span class="sd">                 vec2 = (varargin{1}); %both are numeric; use default operator</span>
+<span class="sd">              end</span>
+<span class="sd">          end</span>
+<span class="sd">    end</span>
+<span class="sd">    if nargin ==3 %arg3 is always function name</span>
+<span class="sd">          vec2 = (varargin{1});</span>
+<span class="sd">          strop = (varargin{2});</span>
+<span class="sd">        if (~(isnumeric(vec) &amp;&amp; (isnumeric(vec2))))</span>
+<span class="sd">       %not both numeric, so convert both to cell array</span>
+<span class="sd">            if(~iscell(vec))</span>
+<span class="sd">       %  This will NOT split a char string input (except at spaces)</span>
+<span class="sd">                bb = textscan(num2str(vec),&#39;%s&#39;);</span>
+<span class="sd">                  vec=bb{1} ;</span>
+<span class="sd">            end</span>
+<span class="sd">            if(~iscell(vec2))</span>
+<span class="sd">                bb = textscan(num2str(vec2),&#39;%s&#39;);</span>
+<span class="sd">                  vec2=bb{1} ;</span>
+<span class="sd">            end</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    %  MatLab handles A&#39;*B as a matrix op. All else must be longhand.</span>
+<span class="sd">      if (strcmp(strop , &#39;*&#39; ) )</span>
+<span class="sd">        zmat = vec(:)*vec2(:)&#39;;</span>
+<span class="sd">      else</span>
+<span class="sd">          %check for handleism</span>
+<span class="sd">          if (~isa(strop,&#39;function_handle&#39;)) strop  = str2func(strop);end;</span>
+<span class="sd">      % two cases:  vec, vec2 are either numeric or cells</span>
+<span class="sd">          if isnumeric(vec) % by design vec2 isnum as well</span>
+<span class="sd">      %check whether the  result is a string</span>
+<span class="sd">            if isnumeric(strop(vec(1),vec2))</span>
+<span class="sd">                zmat = zeros(length(vec), length(vec2));</span>
+<span class="sd">                for ii = 1:length(vec)</span>
+<span class="sd">                 zmat(ii,:) = strop(vec(ii),vec2);</span>
+<span class="sd">                end</span>
+<span class="sd">            else</span>
+<span class="sd">                zmat = cell(length(vec),length(vec2));</span>
+<span class="sd">            % if output is not cell, have to make it so</span>
+<span class="sd">                if iscell(strop(vec(1),vec2))</span>
+<span class="sd">                    for ii = 1:length(vec)</span>
+<span class="sd">                        zmat(ii,:) = strop(vec(ii),vec2);</span>
+<span class="sd">                    end</span>
+<span class="sd">                else</span>
+<span class="sd">                    for ii = 1: length(vec)</span>
+<span class="sd">                       bb = textscan(num2str(strop(vec(ii),vec2)),&#39;%s&#39;);</span>
+<span class="sd">                       zmat(ii,:) = bb{1};</span>
+<span class="sd">                    end</span>
+<span class="sd">                end</span>
+<span class="sd">            end</span>
+<span class="sd">          else</span>
+<span class="sd">     % Do the same &#39;switching&#39; for nonnumeric vectors</span>
+<span class="sd">            zmat = cell(length(vec),length(vec2));</span>
+<span class="sd">            if iscell(strop(vec{1},vec2))</span>
+<span class="sd">                for ii = 1:length(vec)</span>
+<span class="sd">                    zmat(ii,:) = strop(vec{ii},vec2);</span>
+<span class="sd">                end</span>
+<span class="sd">            else</span>
+<span class="sd">                for ii = 1: length(vec)</span>
+<span class="sd">                    zmat(ii,:) = num2cell(strop(vec{ii},vec2));</span>
+<span class="sd">                end</span>
+<span class="sd">            end</span>
+<span class="sd">          end</span>
+<span class="sd">       end</span>
+<span class="sd">    end</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

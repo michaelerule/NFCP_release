@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stateInfer &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>stateInfer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stateInfer</h1><div class="highlight"><pre>
+<span></span><span class="ch"></span>
+<span class="c1"></span>
+<div class="viewcode-block" id="stateInfer"><a class="viewcode-back" href="../stateInfer.html#stateInfer.stateInfer">[docs]</a><span class="k">def</span> <span class="nf">stateInfer</span><span class="p">(</span><span class="n">ini</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">xydata</span><span class="p">,</span><span class="n">true_states</span><span class="p">,</span><span class="n">varargin</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Infer latent states given point-process observations</span>
+
+<span class="sd">    Note: &quot;Surrogate&quot; measurements: In the filtering algorithm, we use a</span>
+<span class="sd">    multivariate Gaussian approximation for latent states. We estimate</span>
+<span class="sd">    an approximate Gaussian posterior for the non-conjugate Poisson</span>
+<span class="sd">    measurement updates. Estimating this approximation can be time</span>
+<span class="sd">    consuming. Once an approximation is estimated, it is possible to</span>
+<span class="sd">    divide out the Gaussian prior to generate a conjugate Gaussian</span>
+<span class="sd">    &quot;measurement&quot; that has the same effect as the Poisson measurement.</span>
+<span class="sd">    This Gaussian measurement can be re-used for nearby parameterizations,</span>
+<span class="sd">    and is much faster than recomputing the approximation. We call these</span>
+<span class="sd">    Gaussian measurements &quot;surrogate&quot; measurements.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ini : `array`</span>
+<span class="sd">        Initial mean intensities</span>
+<span class="sd">    model : `struct`</span>
+<span class="sd">        pre-initialized model structure; see `initializeModel`</span>
+<span class="sd">    true_states : `cell`, default `false`</span>
+<span class="sd">        Ground-truth states (if avaialable). If not available, defaults</span>
+<span class="sd">        to `false`.</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    doplot : `bool`, default `false`</span>
+<span class="sd">        Whether to plot states while filtering</span>
+<span class="sd">    save_figure : `bool`, default `false`</span>
+<span class="sd">        Whether to save plots (if doplot is on) for animation</span>
+<span class="sd">    upscale : `int`, default 8</span>
+<span class="sd">        Amount of upsampling to perform on shown arrays, if plotting is on.</span>
+<span class="sd">    skipinf : `int`, default 10</span>
+<span class="sd">        Skip every `skipinf` (&quot;skip-inferred&quot;) frames if plotting is turned</span>
+<span class="sd">        on.</span>
+<span class="sd">    showduration : `int`, default 200</span>
+<span class="sd">        Total number of time-steps to plot (if plotting)</span>
+<span class="sd">    showmaxy : `int`, default 2</span>
+<span class="sd">        Y-axis maximum for plotting inferred states</span>
+<span class="sd">    showprog : `int`, default false</span>
+<span class="sd">        Whether to print debugging information for every frame</span>
+<span class="sd">    normll : `bool`, default true</span>
+<span class="sd">        Whether to normalize log-likelihood by the number of data</span>
+<span class="sd">        samples.</span>
+<span class="sd">    timeout : `float`, default -1</span>
+<span class="sd">        If this is a positive number, monitor seconds elapsed and terminate</span>
+<span class="sd">        the algorithm early if the runtime exceeds `timeout` seconds.</span>
+<span class="sd">        Note: not supported yet</span>
+<span class="sd">    ratescale : `float`, default 1</span>
+<span class="sd">        The latent A state will be multiplied by this value for display</span>
+<span class="sd">    peakactivity : `bool`, default false</span>
+<span class="sd">        If true, plot the active state density at the location with</span>
+<span class="sd">        the most activity, rather than the spatial average</span>
+<span class="sd">    mergeRstates : `bool`, default true</span>
+<span class="sd">        Merge all refractory states when plotting</span>
+<span class="sd">    poolpoints : `int`, default 5</span>
+<span class="sd">        Number of frames of point events to plot. Should not exceed</span>
+<span class="sd">        the displayed frame rate specified by `skipinf`</span>
+<span class="sd">    MarkerSize : `int`, default 3</span>
+<span class="sd">        MarkerSize parameter forwarded to scatter for plotting point</span>
+<span class="sd">        events</span>
+<span class="sd">    softmax : bool, default true</span>
+<span class="sd">        If true, normalize the color-scheme to the peak value in each</span>
+<span class="sd">        channels in plots.</span>
+<span class="sd">    opt.figure : integer</span>
+<span class="sd">        Restore focus to this window before each plotting call.</span>
+<span class="sd">        this is a workaround for a Matlab bug, wherein a user focus event</span>
+<span class="sd">        can cause new plots to be drawn to the wrong figure.</span>
+<span class="sd">    iniP : matrix</span>
+<span class="sd">        Optional initial conditions for correlation structure</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    llsum : `float` or `vector`</span>
+<span class="sd">        Log-likelihood of data given model (up to a constant factor),</span>
+<span class="sd">        summed over all timepoints. Depending on model configuration,</span>
+<span class="sd">        the log-likelihood may be decomposed into several contributions,</span>
+<span class="sd">        in which case a vector is returned.</span>
+<span class="sd">    infstate : `cell`, 1×Ntimes</span>
+<span class="sd">        Cell array of mean intensity vectors over time. Each cell array</span>
+<span class="sd">        contains a MN² by 1 matrix of pacted states, where M is the number</span>
+<span class="sd">        of states (species), and N is the size of the N×N spatial basis,</span>
+<span class="sd">        with N² basis elements total. Species are packed in order, with</span>
+<span class="sd">        the spatial values packed in Matlab&#39;s default (column major) order.</span>
+<span class="sd">    margvar : `cell`, 1×Ntimes</span>
+<span class="sd">        Cell array of marginal variances for each state, location. This</span>
+<span class="sd">        contains the marginal variances (for each spatial location</span>
+<span class="sd">        and species). It is packed and organized similarly to the `infstate`</span>
+<span class="sd">        variable that contains the mean concentrations. It corresponds</span>
+<span class="sd">        to the diagonal of the covariance matrix.</span>
+<span class="sd">    infe : `cell`, 1×Ntimes</span>
+<span class="sd">        Cell array of effective nonlocal excitation over time. It contains</span>
+<span class="sd">        the local mean-excitation value at all timepoints. Each timepoint</span>
+<span class="sd">        contains a N²x1 matrix. This reflects the total excitatory input</span>
+<span class="sd">        into each spatial region at each timepoint, multiplied by the number</span>
+<span class="sd">        or density of quiescent (Q) agents in that region.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sa">r</span><span class="sd"></span>
+<span class="sd">    %|===== PARAM ====|= VAL =|</span>
+<span class="sd">        &#39;doplot&#39;       ,false, &#39;whether to show plot during inference&#39;</span>
+<span class="sd">        &#39;save_figure&#39;  ,false, &#39;whether to save figures to disk for animation&#39;</span>
+<span class="sd">        &#39;cache&#39;        ,false, &#39;whether to cache the results&#39;</span>
+<span class="sd">        &#39;upscale&#39;      ,8    , &#39;upscaling factor for plotting fields&#39;</span>
+<span class="sd">        &#39;skipinf&#39;      ,10   , &#39;number of timesteps to skip when plotting&#39;</span>
+<span class="sd">        &#39;showduration&#39; ,200  , &#39;time axis length; this parameter is obsolete&#39;</span>
+<span class="sd">        &#39;showmaxy&#39;     ,2    , &#39;y axis height&#39;</span>
+<span class="sd">        &#39;showprog&#39;     ,false, &#39;print progress in terminal&#39;</span>
+<span class="sd">        &#39;normll&#39;       ,true , &#39;normalize the log-likelihood by No. samples&#39;</span>
+<span class="sd">        &#39;timeout&#39;      ,-1   , &#39;whether to give up after a certain time&#39;</span>
+<span class="sd">        &#39;ratescale&#39;    ,1    , &#39;rescale rates&#39;</span>
+<span class="sd">        &#39;peakactivity&#39; ,false, &#39;normalize activity to peak state&#39;</span>
+<span class="sd">        &#39;mergeRstates&#39; ,true , &#39;merge refractory states when plotting&#39;</span>
+<span class="sd">        &#39;poolpoints&#39;   ,5    , &#39;show points from multiple frames&#39;</span>
+<span class="sd">        &#39;MarkerSize&#39;   ,3    , &#39;marker size for plotting point events&#39;</span>
+<span class="sd">        &#39;points&#39;       ,true , &#39;whether to draw point-process events&#39;</span>
+<span class="sd">        &#39;softmax&#39;      ,false, &#39;option for rescaling field colors&#39;</span>
+<span class="sd">        &#39;usesurrogate&#39; ,false, &#39;if true, pass surrogate likelihoods to Laplace-subpace&#39;</span>
+<span class="sd">        &#39;getsurrogate&#39; ,false, &#39;if true, get surrogate likelihoods from Laplace-subpace&#39;</span>
+<span class="sd">        &#39;figure&#39;       ,17   , &#39;figure number or handle to use; defaults to fig 17&#39;</span>
+<span class="sd">        }, varargin);</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Argument check</span>
+<span class="sd">    [model,opt] = verifyArguments(ini,model,xydata,true_states,opt);</span>
+<span class="sd">    Nsample = model.Nsample;</span>
+<span class="sd">    if opt.usesurrogate,</span>
+<span class="sd">        sM = opt.sM;</span>
+<span class="sd">        sP = opt.sP;</span>
+<span class="sd">        sC = opt.sC;</span>
+<span class="sd">    end</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Use forward filtering to recover latent states and likelihood</span>
+
+<span class="sd">    % Accumulate log-likelihood</span>
+<span class="sd">    llsum = 0;</span>
+
+<span class="sd">    % Initial conditions for means, and covariance/precision</span>
+<span class="sd">    M = ini(:);</span>
+<span class="sd">    P = opt.iniP;</span>
+<span class="sd">    C = cinv(P);</span>
+
+<span class="sd">    % Build a projection matrix for computing confidence intervals</span>
+<span class="sd">    % This projects the covariance onto the marginals for each state</span>
+<span class="sd">    % combining all spatial locations.</span>
+<span class="sd">    % If opt.mergeRstates is set, then all refractory states (all states</span>
+<span class="sd">    % after the first two) are merged into a single aggregate state.</span>
+<span class="sd">    if opt.mergeRstates,</span>
+<span class="sd">        varscales = [zeros(2,model.nstates); ones(1,model.nstates)];</span>
+<span class="sd">        varscales(1:3,1:3) = eye(3);</span>
+<span class="sd">    else,</span>
+<span class="sd">        varscales = eye(model.nstates);</span>
+<span class="sd">    end</span>
+<span class="sd">    % The active state (state 2) can be rescaled, since it is typically</span>
+<span class="sd">    % small, for plotting</span>
+<span class="sd">    varscales(2,2)= opt.ratescale;</span>
+<span class="sd">    spatial_means = kron(varscales,ones(1,model.nn));</span>
+<span class="sd">    total_mean    = ones(1,model.dimension);</span>
+<span class="sd">    opt.meanproj  = [spatial_means; total_mean]./model.nn;</span>
+<span class="sd">    opt.K         = size(opt.meanproj,1);</span>
+<span class="sd">    inf_means     = zeros(Nsample,opt.K+1);</span>
+<span class="sd">    inf_errs      = zeros(Nsample,opt.K);</span>
+<span class="sd">    saved_means   = zeros(Nsample,opt.K);</span>
+
+<span class="sd">    % If there is ground-truth data available, generate</span>
+<span class="sd">    % variables used for plotting inferred vs. ground tuth</span>
+<span class="sd">    if opt.have_groundtruth,</span>
+<span class="sd">        for i=1:Nsample,</span>
+<span class="sd">            trueM = real(true_states{i});</span>
+<span class="sd">            saved_means(i,1:opt.K) = opt.meanproj*trueM(:);</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % If plotting, show all events since last displayed time point</span>
+<span class="sd">    if opt.doplot,</span>
+<span class="sd">        opt.figure = figure(17);</span>
+<span class="sd">        NFCP_plotting.fix_figure(opt);</span>
+<span class="sd">        centerfig(gcf,1200,350);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Monitor elapsed time: report progress, erasing previous message</span>
+<span class="sd">    ttime=clock; stime=ttime;</span>
+<span class="sd">    if opt.showprog, fprintf(&#39;\nProcessing frame &#39;); todel=0; end</span>
+
+<span class="sd">    for isamp=1:Nsample</span>
+<span class="sd">        % Monitor progress: print message indicating progress every .5 s</span>
+<span class="sd">        if opt.showprog &amp;&amp; etime(clock,ttime)&gt;1.0,</span>
+<span class="sd">            todel = overprint(sprintf(&#39;%d of %d&#39;,isamp,Nsample),todel);</span>
+<span class="sd">            ttime = clock;</span>
+<span class="sd">        end</span>
+<span class="sd">        if opt.doplot,</span>
+<span class="sd">            if ~opt.use_covariance,</span>
+<span class="sd">                % Store spatial marginal variances</span>
+<span class="sd">                C = cinv(P+model.diag.*model.reg_precision);</span>
+<span class="sd">            end</span>
+<span class="sd">            % Plot progress</span>
+<span class="sd">                xydata,true_states,saved_means,inf_means,inf_errs,opt);</span>
+<span class="sd">        end</span>
+<span class="sd">        if opt.timeout&gt;0 &amp;&amp; etime(clock,stime)&gt;opt.timeout,</span>
+<span class="sd">            % Algorithm has exceeded its time limit!</span>
+<span class="sd">            warning(sprintf(&#39;Algorithm timed out at frame %d;&#39;,isamp));</span>
+<span class="sd">            warning(&#39;Likelihood is not valid&#39;);</span>
+<span class="sd">            llsum = llsum*Nsample/(i-1);</span>
+<span class="sd">            break;</span>
+<span class="sd">        end</span>
+
+<span class="sd">        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">        % Iterate filtering</span>
+<span class="sd">        % Remember means before state update</span>
+<span class="sd">        M0 = M(:);</span>
+<span class="sd">        if opt.use_covariance,</span>
+<span class="sd">            % Measurement update using covariance matrix</span>
+<span class="sd">            [M,C,EINTERACT] = filteringUpdateCovariance(model,M,C);</span>
+<span class="sd">            assertPSD(C,model.safety);</span>
+<span class="sd">            % Check that rates are non-increasing if no spikes</span>
+<span class="sd">            % observed</span>
+<span class="sd">            % (ad-hoc stability measure)</span>
+<span class="sd">            % [~,Mzero,~] = opt.measurementUpdate(model,M,C,zeros(0,2));</span>
+<span class="sd">            % if ~all(Mzero(:)&lt;=M0(:)),</span>
+<span class="sd">            %     warning(&#39;Combined state update and measuement predicts increasing rates even without spikes! Consider reducing excitation.&#39;);</span>
+<span class="sd">            % end</span>
+<span class="sd">            if opt.getsurrogate,</span>
+<span class="sd">                [ll,M,C,rM,rP,rC] = opt.measurementUpdate(model,M,C,xydata{isamp});</span>
+<span class="sd">                sM{isamp} = rM;</span>
+<span class="sd">                sP{isamp} = rP;</span>
+<span class="sd">                sC{isamp} = rC;</span>
+<span class="sd">            elseif opt.usesurrogate,</span>
+<span class="sd">                    sM{isamp},sP{isamp},sC{isamp});</span>
+<span class="sd">            else</span>
+<span class="sd">                [ll,M,C] = opt.measurementUpdate(model,M,C,xydata{isamp});</span>
+<span class="sd">            end</span>
+<span class="sd">            assertPSD(C,model.safety);</span>
+<span class="sd">        else</span>
+<span class="sd">            % Measurement update using precision matrix</span>
+<span class="sd">            [M,P,EINTERACT] = filteringUpdate(model,M,P);</span>
+<span class="sd">            P = assertPSD(P,model.safety);</span>
+<span class="sd">            % Check that rates are non-increasing if no spikes</span>
+<span class="sd">            % observed</span>
+<span class="sd">            % (ad-hoc stability measure)</span>
+<span class="sd">            %[~,Mzero,~] = opt.measurementUpdate(model,M,cinv(C),zeros(0,2));</span>
+<span class="sd">            %if ~all(Mzero(:)&lt;=M0(:)),</span>
+<span class="sd">            %    warning(&#39;Combined state update and measuement predicts increasing rates even without spikes! Consider reducing excitation.&#39;);</span>
+<span class="sd">            %end</span>
+<span class="sd">            if opt.getsurrogate,</span>
+<span class="sd">                [ll,M,P,rM,rP,rC] = opt.measurementUpdate(model,M,P,xydata{isamp});</span>
+<span class="sd">                sM{isamp} = rM;</span>
+<span class="sd">                sP{isamp} = rP;</span>
+<span class="sd">                sC{isamp} = rC;</span>
+<span class="sd">            elseif opt.usesurrogate,</span>
+<span class="sd">                    sM{isamp},sP{isamp},sC{isamp});</span>
+<span class="sd">            else</span>
+<span class="sd">                [ll,M,P] = opt.measurementUpdate(model,M,P,xydata{isamp});</span>
+<span class="sd">            end</span>
+<span class="sd">            assertPSD(P,model.safety);</span>
+<span class="sd">        end</span>
+<span class="sd">        llsum = llsum+ll;</span>
+
+<span class="sd">        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">        % Save filtered states;</span>
+<span class="sd">        infstate{isamp} = M;</span>
+<span class="sd">        infe{isamp} = EINTERACT;</span>
+
+<span class="sd">        % Get the marginal variances</span>
+<span class="sd">        if opt.use_covariance, margvar{isamp}=diag(C);</span>
+<span class="sd">        % Otherwise we need to invert the precision matrix</span>
+<span class="sd">        else,</span>
+<span class="sd">            try, margvar{isamp}=diag(cinv(P));</span>
+<span class="sd">            catch exception,</span>
+<span class="sd">                % safety 0=unchecked, 1=patch, 2=patch and warn, 3=abort</span>
+<span class="sd">                if model.safety==0, rethrow(exception);</span>
+<span class="sd">                else,</span>
+<span class="sd">                    P = P+model.reg_precision.*model.diag;</span>
+<span class="sd">                    model.error(sprintf(&#39;Singular precision in frame %d&#39;,isamp));</span>
+<span class="sd">                end</span>
+<span class="sd">            end</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    if opt.showprog, fprintf(&#39;\n&#39;); end</span>
+
+<span class="sd">    % Normalize l.l. by samples (in case timeout caused early termination)</span>
+<span class="sd">    if opt.normll, llsum = llsum/isamp; end</span>
+<span class="sd">    if model.verbosity&gt;0,</span>
+<span class="sd">        display(&#39;Finished filtering&#39;);</span>
+<span class="sd">        display(sprintf(&#39;Total negative log-likelihood (un-normalized) is %0.4e&#39;,llsum));</span>
+<span class="sd">    end</span>
+<span class="sd">end</span>
+
+
+</div>
+<div class="viewcode-block" id="verifyArguments"><a class="viewcode-back" href="../stateInfer.html#stateInfer.verifyArguments">[docs]</a><span class="k">def</span> <span class="nf">verifyArguments</span><span class="p">(</span><span class="n">ini</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">xydata</span><span class="p">,</span><span class="n">true_states</span><span class="p">,</span><span class="n">opt</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Argument verification</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sa">r</span><span class="sd"></span>
+<span class="sd">    model = initializeModel(model);</span>
+<span class="sd">    % Sanity check number of samples given for inference</span>
+<span class="sd">    Nsample = size(xydata,2);</span>
+<span class="sd">    if isfield(model,&#39;Nsample&#39;) &amp;&amp; Nsample~=model.Nsample,</span>
+<span class="sd">        error(sprintf(&#39;model.Nsample=%d, but %d samples given for inference?&#39;,model.Nsample,Nsample));</span>
+<span class="sd">    else,</span>
+<span class="sd">        model.Nsample = Nsample;</span>
+<span class="sd">    end</span>
+<span class="sd">    % Detect whether ground-truth states were provided</span>
+<span class="sd">    opt.have_groundtruth = ~islogical(true_states)||true_states~=false;</span>
+<span class="sd">    if (opt.usesurrogate|opt.getsurrogate),</span>
+<span class="sd">        if ~strcmp(model.update,&#39;Laplace-subspace&#39;),</span>
+<span class="sd">            &#39;Surrogate measurements only supported with Laplace-subspace update&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        if opt.usesurrogate==opt.getsurrogate,</span>
+<span class="sd">            &#39;Can&#39;&#39;t use and compute surrogate likelihoods simultaneously&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    if nargout&gt;4,</span>
+<span class="sd">        if ~opt.getsurrogate,</span>
+<span class="sd">            &#39;To get surrogate likelihoods, use Laplace-subspace and getsurrogate=true&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        if nargout~=7,</span>
+<span class="sd">            &#39;method can optionally return surrogate means, precisions, covariances&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    if nargout==7 &amp; ~opt.getsurrogate,</span>
+<span class="sd">        &#39;Surrogate means, precisions, covariances are returned as three extra outputs&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    if opt.usesurrogate,</span>
+<span class="sd">        if ~isfield(opt,&#39;sM&#39;),</span>
+<span class="sd">            &#39;To use surrogate likelihoods, pass surrogate means as &#39;&#39;sM&#39;&#39;,values&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        if ~isfield(opt,&#39;sP&#39;),</span>
+<span class="sd">            &#39;To use surrogate likelihoods, pass surrogate precisions as &#39;&#39;sP&#39;&#39;,values&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        if ~isfield(opt,&#39;sC&#39;),</span>
+<span class="sd">            &#39;To use surrogate likelihoods, pass surrogate covariance as &#39;&#39;sC&#39;&#39;,values&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        sM = opt.sM;</span>
+<span class="sd">        sP = opt.sP;</span>
+<span class="sd">        sC = opt.sC;</span>
+<span class="sd">    end</span>
+<span class="sd">    % Initial conditions for means</span>
+<span class="sd">    M = ini(:);</span>
+<span class="sd">    if ~(numel(M)==model.nstates*model.n*model.n),</span>
+<span class="sd">        &#39;Initial state must be the same size state-space: Nspecies x Nspatial^2&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    % Initial conditions for the precision matrix</span>
+<span class="sd">    % These are set heuristically and stored with the model is initialized</span>
+<span class="sd">    if ~isfield(opt,&#39;iniP&#39;),</span>
+<span class="sd">        opt.iniP = model.Pini;</span>
+<span class="sd">    end</span>
+<span class="sd">    assertPSD(opt.iniP,model.safety);</span>
+<span class="sd">    assertPSD(cinv(opt.iniP),model.safety);</span>
+
+<span class="sd">    % Bind measurement update function based on parameters</span>
+<span class="sd">    opt = getUpdateModel(model,opt);</span>
+<span class="sd">end</span>
+
+
+</div>
+<div class="viewcode-block" id="getUpdateModel"><a class="viewcode-back" href="../stateInfer.html#stateInfer.getUpdateModel">[docs]</a><span class="k">def</span> <span class="nf">getUpdateModel</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">opt</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Depending on which update is used,</span>
+<span class="sd">    keep track of either the precision or covariance matrix</span>
+
+<span class="sd">    Laplace update needs the precision matrix.</span>
+
+<span class="sd">    Kalman update can use the covariance matrix directly, which has</span>
+<span class="sd">    a faster update.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sd"></span>
+<span class="sd">    if strcmp(model.update,&#39;Laplace&#39;),</span>
+<span class="sd">        opt.use_covariance = false;</span>
+<span class="sd">        opt.measurementUpdate = @measurementLaplace;</span>
+<span class="sd">    elseif strcmp(model.update,&#39;Laplace-subspace&#39;),</span>
+<span class="sd">        opt.use_covariance = true;</span>
+<span class="sd">        opt.measurementUpdate = @measurementSubspace;</span>
+<span class="sd">    elseif strcmp(model.update,&#39;Kalman&#39;),</span>
+<span class="sd">        error(&#39;The &quot;Kalman&quot; update is deprecated.&#39;);</span>
+<span class="sd">        opt.use_covariance = true;</span>
+<span class="sd">        opt.measurementUpdate = @measurementKalmanCovariance;</span>
+<span class="sd">    elseif strcmp(model.update,&#39;Gamma-subspace&#39;),</span>
+<span class="sd">        error(&#39;The Gamma moment-matching update is not implemented yet&#39;);</span>
+<span class="sd">        opt.use_covariance = true;</span>
+<span class="sd">        opt.measurementUpdate = @measurementGamma;</span>
+<span class="sd">    elseif strcmp(model.update,&#39;EP&#39;),</span>
+<span class="sd">        error(&#39;Expectation propagation is not supported yet.&#39;);</span>
+<span class="sd">        opt.use_covariance = true;</span>
+<span class="sd">        opt.measurementUpdate = @measurementEP;</span>
+<span class="sd">    else,</span>
+<span class="sd">        error(&#39;Update method must Laplace, Kalman, Laplace-subspace, or Gamma-subspace&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">end</span>
+
+
+
+</div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

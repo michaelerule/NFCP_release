@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>output.parfor_progress  &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="output.printModel " href="output.printModel.html" />
+    <link rel="prev" title="output.overprint " href="output.overprint.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="NFCP_init.html">NFCP_init </a></li>
+<li class="toctree-l1"><a class="reference internal" href="assertFilterStability.html">assertFilterStability </a></li>
+<li class="toctree-l1"><a class="reference internal" href="covarianceUpdate.html">covarianceUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="excitatoryRate.html">excitatoryRate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdate.html">filteringUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdateCovariance.html">filteringUpdateCovariance </a></li>
+<li class="toctree-l1"><a class="reference internal" href="initializeModel.html">initializeModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="jacobian.html">jacobian </a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meanUpdate.html">meanUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="noiseModel.html">noiseModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimize.html">optimize package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="output.html">output package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="output.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="output.overprint.html">output.overprint </a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">output.parfor_progress </a></li>
+<li class="toctree-l3"><a class="reference internal" href="output.printModel.html">output.printModel </a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="output.html#-output">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stateInfer.html">stateInfer </a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateSample.html">stateSample </a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="output.html">output package</a> &raquo;</li>
+        
+      <li>output.parfor_progress </li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/output.parfor_progress.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="-output.parfor_progress">
+<span id="output-parfor-progress-"></span><h1>output.parfor_progress <a class="headerlink" href="#-output.parfor_progress" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="output.parfor_progress.parfor_progress">
+<code class="descclassname">output.parfor_progress.</code><code class="descname">parfor_progress</code><span class="sig-paren">(</span><em>N</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/parfor_progress.html#parfor_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#output.parfor_progress.parfor_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>PARFOR_PROGRESS Progress monitor (progress bar) that works with parfor.
+PARFOR_PROGRESS works by creating a file called parfor_progress.txt in
+your working directory, and then keeping track of the parfor loop’s
+progress within that file. This workaround is necessary because parfor
+workers cannot communicate with one another so there is no simple way
+to know which iterations have finished and which haven’t.</p>
+<p>PARFOR_PROGRESS(N) initializes the progress monitor for a set of N
+upcoming calculations.</p>
+<p>PARFOR_PROGRESS updates the progress inside your parfor loop and
+displays an updated progress bar.</p>
+<p>PARFOR_PROGRESS(0) deletes parfor_progress.txt and finalizes progress
+bar.</p>
+<p>To suppress output from any of these functions, just ask for a return
+variable from the function calls, like PERCENT = PARFOR_PROGRESS which
+returns the percentage of completion.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">parfor_progress</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+<span class="n">parfor</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span>
+ <span class="n">pause</span><span class="p">(</span><span class="n">rand</span><span class="p">);</span> <span class="o">%</span> <span class="n">Replace</span> <span class="k">with</span> <span class="n">real</span> <span class="n">code</span>
+ <span class="n">parfor_progress</span><span class="p">;</span>
+<span class="n">end</span>
+<span class="n">parfor_progress</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>See also PARFOR.</p>
+<p>By Jeremy Scheff - <a class="reference external" href="mailto:jdscheff&#37;&#52;&#48;gmail&#46;com">jdscheff<span>&#64;</span>gmail<span>&#46;</span>com</a> - <a class="reference external" href="http://www.jeremyscheff.com/">http://www.jeremyscheff.com/</a></p>
+<p>Copyright (c) 2011, Jeremy Scheff
+All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.</li>
+<li>Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in
+the documentation and/or other materials provided with the distribution</li>
+</ul>
+</div></blockquote>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="output.printModel.html" class="btn btn-neutral float-right" title="output.printModel " accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="output.overprint.html" class="btn btn-neutral" title="output.overprint " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stateSample  &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="util package" href="util.html" />
+    <link rel="prev" title="stateInfer " href="stateInfer.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="NFCP_init.html">NFCP_init </a></li>
+<li class="toctree-l1"><a class="reference internal" href="assertFilterStability.html">assertFilterStability </a></li>
+<li class="toctree-l1"><a class="reference internal" href="covarianceUpdate.html">covarianceUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="excitatoryRate.html">excitatoryRate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdate.html">filteringUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="filteringUpdateCovariance.html">filteringUpdateCovariance </a></li>
+<li class="toctree-l1"><a class="reference internal" href="initializeModel.html">initializeModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="jacobian.html">jacobian </a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meanUpdate.html">meanUpdate </a></li>
+<li class="toctree-l1"><a class="reference internal" href="noiseModel.html">noiseModel </a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stateInfer.html">stateInfer </a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">stateSample </a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>stateSample </li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/stateSample.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="-stateSample">
+<span id="statesample-"></span><h1>stateSample <a class="headerlink" href="#-stateSample" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="stateSample.sampleSates">
+<code class="descclassname">stateSample.</code><code class="descname">sampleSates</code><span class="sig-paren">(</span><em>model</em>, <em>varargin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stateSample.html#sampleSates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stateSample.sampleSates" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function <cite>sampleSates(model,varargin)</cite> will sample the evolution
+of the intensitiy fields and corresponding point-process observations
+from a given model.</p>
+<p>This does not support spatially inhomogeneous gain parameters.
+This does not support the dispersion parameter alpha. (uses alpha=1)</p>
+<p>This uses the complex Langevin equation (Schnoerr &amp; al. 2014), so it
+may return negative intensities. Negative intensities are clipped to
+0 for the purpose of point-process sampling.</p>
+<p>TODO: model.event_rescale is funky.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>model</strong> (<em>struct</em>) – pre-initialized model struct; see <cite>initialiezModel</cite></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>Nsample</strong> (<cite>int</cite>, default 500) – Number of time-points to sample</li>
+<li><strong>Nburn</strong> (<cite>int</cite>, default 200) – Number of initial burn-in samples (to approach steady-state)</li>
+<li><strong>doplot</strong> (<cite>bool</cite>, default <cite>false</cite>) – Whether to plot states while filtering</li>
+<li><strong>upscale</strong> (<cite>int</cite>, default 8) – Amount of upsampling to perform on shown arrays, if plotting</li>
+<li><strong>skipsim</strong> (<cite>int</cite>, default 10) – Skip every <cite>skipsim</cite> (“skip-simulation”) frames, if plotting</li>
+<li><strong>save_figure</strong> (<cite>bool</cite>, default <cite>false</cite>) – Whether to save plots (if doplot is on) for animation</li>
+<li><strong>density</strong> (<cite>float</cite>, default 50,) – Effective population size used</li>
+<li><strong>oversample</strong> (<cite>int</cite>, default 10) – Spatiotemporal spiking resolution (relative to n); Spikes are
+sampled as a Poisson process using the active (A) intensity field
+upsampled by this factor.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>ini</strong> (<cite>matrix</cite>,) – Packed initial conditions for mean concentrations. Species are
+packed in the order defined by the model, where the second
+species reflects the active “A” state.</li>
+<li><strong>xydata</strong> (<cite>cell</cite>, 1×Ntimes) – Cell array of spiking events. For each timepoint, we have a
+Nspikes×2 matrix, where column 1 is the x location and column 2
+is the y location of each spike, in the [0,1]² box.</li>
+<li><strong>rates</strong> (<cite>cell</cite>, 1×Ntimes) – Basis-projected spiking events, with rates normalized by
+spatiotemporal volume.</li>
+<li><strong>simulatedM</strong> (<cite>cell</cite>, 1×Ntimes) – Each cell array contains a MN² by 1 matrix of pacted states, where
+M is the number of states (species), and N is the size of the N×N
+spatial basis, with N² basis elements total. Species are packed in
+order, with the spatial values packed in Matlab’s default
+(column major) order.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stateSample.PoissonEvents">
+<code class="descclassname">stateSample.</code><code class="descname">PoissonEvents</code><span class="sig-paren">(</span><em>model</em>, <em>M</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stateSample.html#PoissonEvents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stateSample.PoissonEvents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add random depolarizatoins as shot noise (Poisson process)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model</strong> (<em>struct</em>) – pre-initialized model struct; see <cite>initialiezModel</cite></li>
+<li><strong>M</strong> (<em>vector</em>) – vector of mean intensities</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>M</strong> – updated vector of mean intentities with random excitation events
+applied</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">vector</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="stateSample.sampleSpikes">
+<code class="descclassname">stateSample.</code><code class="descname">sampleSpikes</code><span class="sig-paren">(</span><em>model</em>, <em>M</em>, <em>opt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stateSample.html#sampleSpikes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stateSample.sampleSpikes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample spikes from 2D intensity fields (uses the second field, by
+convention termed the <cite>A</cite> or active-state field).</p>
+<p>This does not support spatially inhomogeneous gain parameters.
+This does not support the dispersion parameter alpha.</p>
+<p>This actually does Bernoulli sampling, but on a spatially upsampled
+domain where the Poisson process can be approximated as Bernoilli.</p>
+<p>The purpose of this is to sample a single spike at each spatial
+location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>model</strong> (<em>struct</em>) – pre-initialized model struct; see <cite>initialiezModel</cite></li>
+<li><strong>M</strong> (<em>vector</em>) – vector of mean intensities</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>spikes</strong> – Array of spiking (x,y) locations</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">2d array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="util.html" class="btn btn-neutral float-right" title="util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="stateInfer.html" class="btn btn-neutral" title="stateInfer " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
