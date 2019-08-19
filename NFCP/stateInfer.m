@@ -176,7 +176,7 @@ function [llsum,infstate,margvar,infe,sM,sP,sC] = stateInfer(ini,model,xydata,tr
     if opt.doplot, 
         opt.figure = figure(17);
         NFCP_plotting.fix_figure(opt); 
-        centerfig(gcf,1200,350);
+        NFCP_plotting.centerfig(gcf,1200,350);
     end
 
     % Monitor elapsed time: report progress, erasing previous message

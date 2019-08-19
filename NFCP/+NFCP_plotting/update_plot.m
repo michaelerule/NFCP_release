@@ -88,7 +88,8 @@ function update_plot(model,i,M,xydata,true_states,saved_means,inf_means,inf_errs
         plot(times,real(useforplot(1:i,j)),'LineWidth',1);
         hold on; 
     end
-    xlabel('Time step'); ylabel('Inferred means');
+    xlabel('Time (seconds)');
+    ylabel('Inferred means');
     
     % Plot observed counts averaged over arrays
     c = cell2mat(cellfun(@(x)size(x,1),xydata,'uni',false));
@@ -118,13 +119,6 @@ function update_plot(model,i,M,xydata,true_states,saved_means,inf_means,inf_errs
     meanR = inf_means (1:i,3);
     errR  = inf_errs(1:i,3);
     fill(xx,[meanR-errR; flipud(meanR+errR)]', 1, 'facecolor','green','edgecolor','none','facealpha', 0.3);
-    %{
-    % Plot total count with error bar
-    meanC = inf_means (1:i,4);
-    errC  = inf_errs(1:i,4);
-    plot(real(meanC),'LineWidth',1);
-    fill(xx,[meanC-errC; flipud(meanC+errC)]', 1,'facecolor','magenta','edgecolor','none','facealpha', 0.3);
-    %}
     
     % Clean up plot   
     NFCP_plotting.fix_figure(opt); 

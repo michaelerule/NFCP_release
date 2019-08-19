@@ -170,39 +170,39 @@
 
 <span class="sd">    Precompute commonly used values and initialize the model.</span>
 
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | Variable                 | Units                                     |</span>
-<span class="sd">    +==========================+===========================================+</span>
-<span class="sd">    | model.dt                 | seconds      /   bin_t                    |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.n                  | bin_x        /   array_x                  |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.nn                 | bin_x²       /   array_x²                 |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.dx                 | array_x²     /   bin_x²                   |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.volume             | s∙array_x²   /   bin_x²∙bin_t             |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.bias               | spikes       /   bin_x²∙bin_t             |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.gain               | spikes       /   s∙array_x²               |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.alpha              | spike mean   /   spike standard dev.      |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.sigma              | array_x (1=linear size of array)          |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.linearRates        | 1/neuron/s                                |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.rAA                | 1/neuron²/s (1/fraction²/s if normalized) |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.inhomogeneous_gain | unitless                                  |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.adjusted_bias      | unitless                                  |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | model.adjusted_gain      | alpha∙spikes /   bin_x²∙bin_t             |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
-<span class="sd">    | rate (inside obj. fun.)  | spikes       /   bin_x²∙bin_t             |</span>
-<span class="sd">    +--------------------------+-------------------------------------------+</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | Variable                 | Units                                     | Description                    |</span>
+<span class="sd">    +==========================+===========================================+================================+</span>
+<span class="sd">    | model.dt                 | seconds      /   bin_t                    | Time-step                      |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.n                  | bin_x        /   array_x                  | Spatial discretization n×n     |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.nn                 | bin_x²       /   array_x²                 | No. bins in model (n²)         |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.dx                 | array_x²     /   bin_x²                   | Region spatial volume          |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.volume             | s∙array_x²   /   bin_x²∙bin_t             | Spatiotemporal volume (normd.) |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.bias               | spikes       /   bin_x²∙bin_t             | Baseline firing rate           |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.gain               | spikes       /   s∙array_x²               | Firing rate gain               |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.alpha              | spike mean   /   spike standard dev.      | Spike count dispersion         |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.sigma              | array_x (1=linear size of array)          | Nonlocal interaction scale     |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.linearRates        | 1/neuron/s                                | Transition rates               |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.rAA                | 1/neuron²/s (1/fraction²/s if normalized) | Excito-excitatory rate         |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.inhomogeneous_gain | unitless                                  | Local gain adjustment          |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.adjusted_bias      | unitless                                  | Local baseline rates           |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.adjusted_gain      | alpha∙spikes /   bin_x²∙bin_t             | Gain in units of spike density |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | rate (inside obj. fun.)  | spikes       /   bin_x²∙bin_t             | Rate used for inference        |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -357,6 +357,7 @@
 <span class="sd">        &#39;link&#39;         ,&#39;linear&#39; ,&#39;link function for observation&#39;</span>
 <span class="sd">        &#39;update&#39;       ,&#39;Laplace&#39;,&#39;Measurement update algorithm; only Laplace supported presently&#39;</span>
 <span class="sd">        &#39;likemethod&#39;   ,&#39;ML&#39;     ,&#39;only maximum-likelihood (ML) is supported at this time&#39;</span>
+<span class="sd">        &#39;dolikelihood&#39; ,true     ,&#39;Set to false to skip computing likelihood&#39;</span>
 <span class="sd">        % Newton-Raphson convergence control and regularization parameters</span>
 <span class="sd">        &#39;llreg&#39;        ,0.0      ,&#39;No regularization for log-Determinant in likelihood&#39;</span>
 <span class="sd">        &#39;tol&#39;          ,1e-4     ,&#39;Measurement convergence tolerance&#39;</span>

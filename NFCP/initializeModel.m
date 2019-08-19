@@ -2,39 +2,39 @@ function model = initializeModel(model,varargin)
     %{
     Precompute commonly used values and initialize the model.
     
-    +--------------------------+-------------------------------------------+
-    | Variable                 | Units                                     | 
-    +==========================+===========================================+
-    | model.dt                 | seconds      /   bin_t                    |
-    +--------------------------+-------------------------------------------+
-    | model.n                  | bin_x        /   array_x                  |
-    +--------------------------+-------------------------------------------+
-    | model.nn                 | bin_x²       /   array_x²                 |
-    +--------------------------+-------------------------------------------+
-    | model.dx                 | array_x²     /   bin_x²                   |
-    +--------------------------+-------------------------------------------+
-    | model.volume             | s∙array_x²   /   bin_x²∙bin_t             |
-    +--------------------------+-------------------------------------------+
-    | model.bias               | spikes       /   bin_x²∙bin_t             |
-    +--------------------------+-------------------------------------------+
-    | model.gain               | spikes       /   s∙array_x²               |
-    +--------------------------+-------------------------------------------+
-    | model.alpha              | spike mean   /   spike standard dev.      |
-    +--------------------------+-------------------------------------------+
-    | model.sigma              | array_x (1=linear size of array)          |
-    +--------------------------+-------------------------------------------+
-    | model.linearRates        | 1/neuron/s                                |
-    +--------------------------+-------------------------------------------+
-    | model.rAA                | 1/neuron²/s (1/fraction²/s if normalized) |
-    +--------------------------+-------------------------------------------+
-    | model.inhomogeneous_gain | unitless                                  |
-    +--------------------------+-------------------------------------------+
-    | model.adjusted_bias      | unitless                                  |
-    +--------------------------+-------------------------------------------+
-    | model.adjusted_gain      | alpha∙spikes /   bin_x²∙bin_t             |
-    +--------------------------+-------------------------------------------+
-    | rate (inside obj. fun.)  | spikes       /   bin_x²∙bin_t             |
-    +--------------------------+-------------------------------------------+
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | Variable                 | Units                                     | Description                    |
+    +==========================+===========================================+================================+
+    | model.dt                 | seconds      /   bin_t                    | Time-step                      |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.n                  | bin_x        /   array_x                  | Spatial discretization n×n     |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.nn                 | bin_x²       /   array_x²                 | No. bins in model (n²)         |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.dx                 | array_x²     /   bin_x²                   | Region spatial volume          |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.volume             | s∙array_x²   /   bin_x²∙bin_t             | Spatiotemporal volume (normd.) |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.bias               | spikes       /   bin_x²∙bin_t             | Baseline firing rate           |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.gain               | spikes       /   s∙array_x²               | Firing rate gain               |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.alpha              | spike mean   /   spike standard dev.      | Spike count dispersion         |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.sigma              | array_x (1=linear size of array)          | Nonlocal interaction scale     |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.linearRates        | 1/neuron/s                                | Transition rates               |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.rAA                | 1/neuron²/s (1/fraction²/s if normalized) | Excito-excitatory rate         |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.inhomogeneous_gain | unitless                                  | Local gain adjustment          |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.adjusted_bias      | unitless                                  | Local baseline rates           |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | model.adjusted_gain      | alpha∙spikes /   bin_x²∙bin_t             | Gain in units of spike density |
+    +--------------------------+-------------------------------------------+--------------------------------+
+    | rate (inside obj. fun.)  | spikes       /   bin_x²∙bin_t             | Rate used for inference        |
+    +--------------------------+-------------------------------------------+--------------------------------+
     
     Example
     -------
@@ -187,6 +187,7 @@ function model = initializeModel(model,varargin)
         'link'         ,'linear' ,'link function for observation'
         'update'       ,'Laplace','Measurement update algorithm; only Laplace supported presently'
         'likemethod'   ,'ML'     ,'only maximum-likelihood (ML) is supported at this time'
+        'dolikelihood' ,true     ,'Set to false to skip computing likelihood'
         % Newton-Raphson convergence control and regularization parameters
         'maxiter'      ,15       ,'Newton-Raphson iteractions in measurement update'; ...
         'llreg'        ,0.0      ,'No regularization for log-Determinant in likelihood'

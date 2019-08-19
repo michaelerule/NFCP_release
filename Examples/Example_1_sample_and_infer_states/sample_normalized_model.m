@@ -5,13 +5,9 @@ addpath('./','../','../../','../../NFCP'); % Add paths
 NFCP_init
 
 %{
+Example 1c: 
 
-Example 1b: 
-
-Sample from the model, then infer states using the system-size normalized 
-version of the model. (This is the version that we will use on the retina
-waves data)
-
+Sample from a normalized model and infer states
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,12 +17,12 @@ waves data)
 effectivepopsize = 50;
 
 % Excitation model options
-model.rAA     = 1.40./effectivepopsize;  % Excito-Excitatory interaction strength
+model.rAA     = 1.40;  % Excito-Excitatory interaction strength
 model.thr     = 8e-3;  % Nonzero threshold for depolarization
 model.sigma   = 0.1;   % Standard-deviation for excitatory interaction kernel
 
 % Observation model options
-model.gain    = 15; % Gain for linear Cox-process observation model for spikes
+model.gain    = 15*effectivepopsize; % Gain for linear Cox-process observation model for spikes
 model.bias    = 0;  % Bias for linear Cox-process observation model for spikes
 model.alpha   = 1;  % Dispersion paramter, 1=Poisson
 
@@ -63,17 +59,21 @@ model.n         = 12;  % Simulation grid resolution
 model.verbosity = 0;
 model.safety    = 0;
 model.cscale    = [1 20 1]; % Color scales for mapping Q/A/R for display
+
+model.cutoff    = false;
+model.ss_rescale= 1./effectivepopsize;
+
 model = initializeModel(model);
 Nsample = 1000;
 fprintf(1,'Sampling from model...\n');
 [ini,xydata,rates,simulatedM] = stateSample(model,{...
-    'doplot'      ,false 
+    'doplot'      ,true 
     'Nsample'     ,Nsample 
     'Nburn'       ,250  
     'upscale'     ,8    
     'skipsim'     ,20
-    'oversample'  ,10   
-    'effectivepopsize'     ,effectivepopsize
+    'oversample'  ,10
+    'effectivepopsize'     ,1
     'save_figure' ,false
     });
 
@@ -102,18 +102,10 @@ simulatedM: `cell`, 1×Ntimes
     (column major) order. 
 %}
 
-
 %{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Infer states while animating, using a normalized model.
 %}
-
-% Convert to normalized intensityies
-rescaledM = {};
-for i=1:Nsample,
-    rescaledM{i} = simulatedM{i}./effectivepopsize;
-end
-rescaledini = ini./effectivepopsize;
 
 infermodel = initializeModel(model);
 
@@ -125,32 +117,27 @@ infermodel.update         = 'Laplace-subspace';
 infermodel.cutoff         = false;
 infermodel.dolikelihood   = false;
 
-% These parameters change when working with normalized coordinates
-infermodel.gain           = model.gain.*effectivepopsize;
-infermodel.minrate        = model.minrate./effectivepopsize;
-infermodel.rAA            = 1.40;  % Excito-Excitatory interaction strength
-infermodel.thr            = 8e-3./effectivepopsize;  % Nonzero threshold for depolarization
-
 % The state inference should converge from uncertain initial conditions, but it
 % takes O(10000) timesteps to do so. For a quick illustration, we start the
 % inference around the correct initial conditions.
 infermodel.ini_state_var  = 1e-2;
+infermodel.minrate        = 1e-4./effectivepopsize;
 
 % By default the code will try to scale fluctuations by 1/N²
 % In the normalized model, we want fluctuations to be scaled by 1/effectivepopsize.
 % This factor overrides the default scaling to ensure this:
-if infermodel.cutoff,
-    infermodel.ss_rescale = 1./(effectivepopsize*2*pi*model.sigma^2.);
-else
-    infermodel.ss_rescale = model.n.^2./effectivepopsize;
-end
+%if infermodel.cutoff,
+%    infermodel.ss_rescale = 1./(effectivepopsize*2*pi*model.sigma^2.);
+%else
+%    infermodel.ss_rescale = model.n.^2./effectivepopsize;
+%end
 
 infermodel = initializeModel(infermodel);
 
 fprintf('Animating...')
 tic()
 profile off; profile clear; profile on;  
-[llsum,infstate,margvar,infe] = stateInfer(rescaledini,infermodel,xydata,rescaledM,{...
+[llsum,infstate,margvar,infe] = stateInfer(ini,infermodel,xydata,simulatedM,{...
     'doplot'       ,true 
     'upscale'      ,8
     'skipinf'      ,20

@@ -29,22 +29,6 @@ function [inf_means,inf_errs] = do_plot(model,i,M,C,xydata,true_states,saved_mea
         inf_means(i,2) = maxval*opt.ratescale;
     end
     
-    %{
-    % Estimate expected activation directly from counts
-    % This will be plotted as a sanity check against inferred A density
-    count = pointsToHistogram(xydata{i},model.n,model.interpolate,0);
-    count = model.blur(count.*model.alpha);
-    if strcmp(model.link,'linear'),
-        Aest = count(:)./model.premultiplied_gain-model.premultiplied_bias;
-    else,
-        Aest = log(count(:)./(model.volume.*model.alpha.*model.bias))./model.gain;
-    end
-    % remove dead regions
-    Aest  = Aest(model.premultiplied_gain>0.0); 
-    % use the maximum over the spatial domain to let localized events show through
-    if opt.peakactivity, f=@nanmax; else, f=@nanmean; end;
-    %}
-    
     var = diag(opt.meanproj*C*opt.meanproj');
     inf_errs(i,1:opt.K) = sqrt(var).*1.96;
     if opt.peakactivity,

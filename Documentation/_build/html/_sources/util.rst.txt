@@ -8,7 +8,6 @@ Submodules
 
    util.applyOptions
    util.cachedinvoke
-   util.centerfig
    util.dataHash
    util.functional_macros
    util.nearestPositivePoint

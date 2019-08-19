@@ -198,12 +198,15 @@
 <span class="sd">        Skip every `skipsim` (&quot;skip-simulation&quot;) frames, if plotting</span>
 <span class="sd">    save_figure : `bool`, default `false`</span>
 <span class="sd">        Whether to save plots (if doplot is on) for animation</span>
-<span class="sd">    density : `float`, default 50,</span>
+<span class="sd">    effectivepopsize : `float`, default 50,</span>
 <span class="sd">        Effective population size used</span>
 <span class="sd">    oversample : `int`, default 10</span>
 <span class="sd">        Spatiotemporal spiking resolution (relative to n); Spikes are</span>
 <span class="sd">        sampled as a Poisson process using the active (A) intensity field</span>
 <span class="sd">        upsampled by this factor.</span>
+<span class="sd">    efraction : `float`, default 0.05</span>
+<span class="sd">        Fraction of cells within local region that are excited by</span>
+<span class="sd">        spontaneous wave events.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -230,6 +233,7 @@
     <span class="sa">r</span><span class="sd"></span>
 
 <span class="sd">    %|===== PARAM ====|=VAL=|= NOTE =|</span>
+<span class="sd">        &#39;efraction&#39;   ,0.05,&#39;Fraction Quiescent cells excited in spontaneous events&#39;</span>
 <span class="sd">    }, varargin);</span>
 
 
@@ -238,9 +242,10 @@
 <span class="sd">    % Matlab does pass-by-reference with copy-on-write</span>
 <span class="sd">    % Changes to the model struct here remain local</span>
 <span class="sd">    model = initializeModel(model);</span>
+
 <span class="sd">    % For sampling the Langevin equation, noise is the same as that of the LNA</span>
-<span class="sd">    model.method = &#39;LNA&#39;;</span>
 <span class="sd">    % Square-root form makes sampling fluctuations simpler</span>
+<span class="sd">    model.method   = &#39;LNA&#39;;</span>
 <span class="sd">    model.sqrtform = true;</span>
 
 <span class="sd">    % Check for legacy model definitions</span>
@@ -258,16 +263,23 @@
 <span class="sd">        warning(&#39;Event rate &lt;1e-12; is this intended?&#39;);</span>
 <span class="sd">    end</span>
 <span class="sd">    if (model.event_rate&gt;0.1),</span>
-<span class="sd">        display(&#39;Warning: spontaneous rate too nigh to model as shot noise&#39;);</span>
+<span class="sd">        display(&#39;Warning: spontaneous rate too nigh to model as Poisson noise&#39;);</span>
 <span class="sd">        display(&#39;Increase resolution or reduce spontaneous rate?&#39;);</span>
 <span class="sd">        model.event_rate = min(max(1.0-exp(-model.event_rate),0.0),1.0);</span>
 <span class="sd">    end</span>
 
 <span class="sd">    % For simluation, spontaneous depolarization is modeled as shot noise</span>
 <span class="sd">    % which has a gain-like effect of increasing the Q-&gt;A transition in a</span>
-<span class="sd">    % local area. The effect must be rescaled for neuron density when the</span>
+<span class="sd">    % local area. The effect must be rescaled for neuron effectivepopsize when the</span>
 <span class="sd">    % simulation grid scale is adjusted. This parameter not used for inference.</span>
-<span class="sd">    model.event_rescale = (model.n/20.0).^2;</span>
+
+<span class="sd">    % Old behavior</span>
+<span class="sd">    % model.event_rescale = (model.n/20.0).^2;</span>
+<span class="sd">    % To reproduce old behavior with new parameters, set</span>
+<span class="sd">    % efraction = 0.04 ~= 0.25/(2*pi);</span>
+
+<span class="sd">    % Wave events excite 5% of the quiescent cells within a local region</span>
+<span class="sd">    model.event_rescale = 2*pi*(model.sigma.*model.n).^2.*opt.efraction;</span>
 
 <span class="sd">    % Spontaneous excitation will be handeled separately.</span>
 <span class="sd">    % Disable it here so it does not affect the mean update</span>
@@ -278,10 +290,10 @@
 
 <span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
 <span class="sd">    % initial condition of intensity fields</span>
-<span class="sd">    cellDensity = ones(1,model.n*model.n)*opt.density;</span>
-<span class="sd">    Q = cellDensity*0.9;  % Quiescent</span>
-<span class="sd">    A = cellDensity*0.05; % Active</span>
-<span class="sd">    R = cellDensity*0.05/(model.nstates-2); % Refractory</span>
+<span class="sd">    celleffectivepopsize = ones(1,model.n*model.n)*opt.effectivepopsize;</span>
+<span class="sd">    Q = celleffectivepopsize*0.9;  % Quiescent</span>
+<span class="sd">    A = celleffectivepopsize*0.05; % Active</span>
+<span class="sd">    R = celleffectivepopsize*0.05/(model.nstates-2); % Refractory</span>
 <span class="sd">    ini = [Q A kron(R,ones(1,(model.nstates-2)))];</span>
 <span class="sd">    M = ini;</span>
 
@@ -298,13 +310,12 @@
 <span class="sd">    % to give the false impression that the algorithm can infer fields from</span>
 <span class="sd">    % extremely sparse data)</span>
 <span class="sd">    last_frame = 1;</span>
+<span class="sd">    spatial_mean_projection = kron(eye(model.nstates),ones(1,model.nn))./model.nn;</span>
 <span class="sd">    % Build a projection matrix for computing confidence intervals</span>
 <span class="sd">    if opt.doplot,</span>
-<span class="sd">        spatial_mean_projection = kron(eye(model.nstates),ones(1,model.nn))./model.nn;</span>
-<span class="sd">        %figure(&#39;Position&#39;,[191,199,793,502]);</span>
 <span class="sd">        opt.figure = figure(17);</span>
 <span class="sd">        NFCP_plotting.fix_figure(opt);</span>
-<span class="sd">        centerfig(gcf,1200,350);</span>
+<span class="sd">        NFCP_plotting.centerfig(gcf,1200,350);</span>
 <span class="sd">    end</span>
 
 <span class="sd">    % Remember the current state (initial conditions for sampling)</span>
@@ -340,8 +351,11 @@
 <span class="sd">            end</span>
 <span class="sd">            % Plot average intensities over time</span>
 <span class="sd">            subplot(1,3,[2 3]);</span>
-<span class="sd">            plot(real(saved_means));</span>
-<span class="sd">            xlabel(&#39;Time step&#39;);</span>
+<span class="sd">            times = (1:size(saved_means,1))*abs(model.dt);</span>
+<span class="sd">            plot(times,real(saved_means));</span>
+<span class="sd">            ta = max(0,times(end)-100);</span>
+<span class="sd">            xlim([ta,ta+100]);</span>
+<span class="sd">            xlabel(&#39;Time (seconds)&#39;);</span>
 <span class="sd">            ylabel(&#39;Mean concentration&#39;);</span>
 <span class="sd">            legend([model.names &#39;Total&#39;]);</span>
 <span class="sd">            hold off;</span>
@@ -354,7 +368,7 @@
 <span class="sd">        end</span>
 
 
-<span class="sd">        % Solve the field model forward in time with known parameters</span>
+<span class="sd">        % Solve the model forward in time with known parameters</span>
 <span class="sd">        % Use linear noise approximation to generate fluctuations</span>
 <span class="sd">        M = meanUpdate(model,M);</span>
 <span class="sd">        L = noiseModel(model,M);</span>

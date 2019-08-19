@@ -101,9 +101,14 @@ function [loglikelihood,M2,C2,rMa,rPa,rCa] = measurementSubspace(model,M,C,xypoi
     end 
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Log-likelihood
-    [loglikelihood] = logLikelihood(model,M,cinv(C),M2,cinv(C2),y);
-    %[loglikelihood] = logLikelihood(model,Ma,Pa,pMa,pPa,y);
+    % Estimate of the likelihood
+    if model.dolikelihood,
+        loglikelihood = logLikelihood(model,M,cinv(C),M2,cinv(C2),y);
+        assert(~isnan(loglikelihood));
+        assert(all(isfinite(loglikelihood)));
+    else
+        loglikelihood = NaN;
+    end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Optional negative-means handling (slow!)
@@ -111,7 +116,9 @@ function [loglikelihood,M2,C2,rMa,rPa,rCa] = measurementSubspace(model,M,C,xypoi
         % Could re-run constrained Laplace update? 
         % [loglikelihood,pmode,pprec] = measurementLaplace(model,M,P,xypoints)
         % [loglikelihood,M2,C2,rMa,rPa,rCa] = measurementSubspace(model,M,C,xypoints,srMa,srPa,srCa)
-        fprintf(2,'Subspace update yielded negative intensities; falling-back to Laplace.\n');
+        if model.verbosity>=2,
+            fprintf(2,'Subspace update yielded negative intensities; using constrained Laplace.\n');
+        end
         [loglikelihood,M2,P2] = measurementLaplace(model,M,cinv(C),xypoints);
         C2 = cinv(P2);
         %{

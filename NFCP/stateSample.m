@@ -30,12 +30,15 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
         Skip every `skipsim` ("skip-simulation") frames, if plotting
     save_figure : `bool`, default `false`
         Whether to save plots (if doplot is on) for animation
-    density : `float`, default 50,
+    effectivepopsize : `float`, default 50,
         Effective population size used
     oversample : `int`, default 10  
         Spatiotemporal spiking resolution (relative to n); Spikes are 
         sampled as a Poisson process using the active (A) intensity field
-        upsampled by this factor. 
+        upsampled by this factor.
+    efraction : `float`, default 0.05
+        Fraction of cells within local region that are excited by 
+        spontaneous wave events. 
     
     Returns
     -------
@@ -66,8 +69,9 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
         'upscale'     ,8    ,'Upsampling factor for visualizing field states';...
         'skipsim'     ,5    ,'Show every skip frames during simulation';...
         'oversample'  ,20   ,'Spatiotemporal spiking resolution (relative to n)';...
-        'density'     ,50   ,'Cell density';...
+        'effectivepopsize'     ,50   ,'Cell effectivepopsize';...
         'save_figure' ,false,'Write figures to disk as frames for animation?';...
+        'efraction'   ,0.05,'Fraction Quiescent cells excited in spontaneous events'
     }, varargin);
     
     
@@ -76,9 +80,10 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
     % Matlab does pass-by-reference with copy-on-write
     % Changes to the model struct here remain local
     model = initializeModel(model);
+
     % For sampling the Langevin equation, noise is the same as that of the LNA
-    model.method = 'LNA';
     % Square-root form makes sampling fluctuations simpler
+    model.method   = 'LNA';
     model.sqrtform = true;
     
     % Check for legacy model definitions
@@ -96,16 +101,23 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
         warning('Event rate <1e-12; is this intended?');
     end
     if (model.event_rate>0.1),
-        display('Warning: spontaneous rate too nigh to model as shot noise');
+        display('Warning: spontaneous rate too nigh to model as Poisson noise');
         display('Increase resolution or reduce spontaneous rate?');
         model.event_rate = min(max(1.0-exp(-model.event_rate),0.0),1.0);
     end
     
     % For simluation, spontaneous depolarization is modeled as shot noise
     % which has a gain-like effect of increasing the Q->A transition in a 
-    % local area. The effect must be rescaled for neuron density when the 
+    % local area. The effect must be rescaled for neuron effectivepopsize when the 
     % simulation grid scale is adjusted. This parameter not used for inference.
-    model.event_rescale = (model.n/20.0).^2;
+    
+    % Old behavior
+    % model.event_rescale = (model.n/20.0).^2;
+    % To reproduce old behavior with new parameters, set
+    % efraction = 0.04 ~= 0.25/(2*pi);
+
+    % Wave events excite 5% of the quiescent cells within a local region
+    model.event_rescale = 2*pi*(model.sigma.*model.n).^2.*opt.efraction;
     
     % Spontaneous excitation will be handeled separately.
     % Disable it here so it does not affect the mean update
@@ -116,10 +128,10 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % initial condition of intensity fields
-    cellDensity = ones(1,model.n*model.n)*opt.density;
-    Q = cellDensity*0.9;  % Quiescent
-    A = cellDensity*0.05; % Active
-    R = cellDensity*0.05/(model.nstates-2); % Refractory
+    celleffectivepopsize = ones(1,model.n*model.n)*opt.effectivepopsize;
+    Q = celleffectivepopsize*0.9;  % Quiescent
+    A = celleffectivepopsize*0.05; % Active
+    R = celleffectivepopsize*0.05/(model.nstates-2); % Refractory
     ini = [Q A kron(R,ones(1,(model.nstates-2)))];
     M = ini;
 
@@ -136,13 +148,12 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
     % to give the false impression that the algorithm can infer fields from
     % extremely sparse data)
     last_frame = 1;
+    spatial_mean_projection = kron(eye(model.nstates),ones(1,model.nn))./model.nn;
     % Build a projection matrix for computing confidence intervals
     if opt.doplot,
-        spatial_mean_projection = kron(eye(model.nstates),ones(1,model.nn))./model.nn;
-        %figure('Position',[191,199,793,502]);
         opt.figure = figure(17);
         NFCP_plotting.fix_figure(opt); 
-        centerfig(gcf,1200,350);
+        NFCP_plotting.centerfig(gcf,1200,350);
     end
     
     % Remember the current state (initial conditions for sampling)
@@ -178,9 +189,12 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
                 last_frame = last_frame+1;
             end
             % Plot average intensities over time
-            subplot(1,3,[2 3]); 
-            plot(real(saved_means));
-            xlabel('Time step'); 
+            subplot(1,3,[2 3]);
+            times = (1:size(saved_means,1))*abs(model.dt);
+            plot(times,real(saved_means));
+            ta = max(0,times(end)-100);
+            xlim([ta,ta+100]);
+            xlabel('Time (seconds)'); 
             ylabel('Mean concentration'); 
             legend([model.names 'Total']);
             hold off; 
@@ -193,7 +207,7 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
         end
         
 
-        % Solve the field model forward in time with known parameters
+        % Solve the model forward in time with known parameters
         % Use linear noise approximation to generate fluctuations
         M = meanUpdate(model,M);
         L = noiseModel(model,M);

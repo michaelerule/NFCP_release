@@ -9,10 +9,10 @@ NFCP_init
 
 % Number of "neurons" per unit area
 % (simulation grid is defined as one unit area)
-density = 50;
+effectivepopsize = 50;
 
 % Excitation model options
-model.rAA     = 1.40./density;  % Excito-Excitatory interaction strength
+model.rAA     = 1.40./effectivepopsize;  % Excito-Excitatory interaction strength
 model.thr     = 8e-3;  % Nonzero threshold for depolarization
 model.sigma   = 0.1;   % Standard-deviation for excitatory interaction kernel
 
@@ -70,6 +70,12 @@ model.description = [ ...
      0 -1  1  4e-1  % slow refractory loop
      1  0 -1  32e-4 % slow refractory recovery
      ];
+model.description = [ ...
+%    Q  A R1  rate
+    -1  1  0  2e-1  % spontaneous excitation 
+     0 -1  1  4e-1  % slow refractory loop
+     1  0 -1  32e-4 % slow refractory recovery
+     ];
 
 % RGB tuples for all species
 model.colors = [0 1 0; 1 0 0; 0 0 1]; 
@@ -91,7 +97,7 @@ model = initializeModel(model);
     'upscale'     ,8    
     'skipsim'     ,20
     'oversample'  ,10   
-    'density'     ,density
+    'effectivepopsize'     ,effectivepopsize
     'save_figure' ,false
     });
 
@@ -129,12 +135,13 @@ Infer states while animating
 
 % Adjustments for state-inference
 % Turn off the spontaneous exictation (infer as extrinsic noise)
-model.rQA            = 0.0;
-model.linearRates(1) = 0.0;
+model.rQA               = 0.0;
+model.linearRates(1)    = model.rQA;
 % Turn off finite threshold on means 
-model.thr            = 0.0;
-model.update         = 'Laplace'; % Measurement update method
-model.cutoff         = false
+model.thr               = 0.0;
+model.update            = 'Laplace-subspace'; % Measurement update method
+model.cutoff            = false
+infermodel.dolikelihood = false;
 model = initializeModel(model);
 
 fprintf('Animating...')
@@ -143,9 +150,9 @@ profile off; profile clear; profile on;
 [llsum,infstate,margvar,infe] = stateInfer(ini,model,xydata,simulatedM,{...
     'doplot'       ,true 
     'upscale'      ,8
-    'skipinf'      ,10
+    'skipinf'      ,100
     'showduration' ,1000  
-    'showmaxy'     ,density+5   
+    'showmaxy'     ,effectivepopsize+5   
     'ratescale'    ,25
     'peakactivity' ,false
     'points'       ,false

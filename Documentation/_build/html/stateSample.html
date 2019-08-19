@@ -194,10 +194,12 @@ may return negative intensities. Negative intensities are clipped to
 <li><strong>upscale</strong> (<cite>int</cite>, default 8) – Amount of upsampling to perform on shown arrays, if plotting</li>
 <li><strong>skipsim</strong> (<cite>int</cite>, default 10) – Skip every <cite>skipsim</cite> (“skip-simulation”) frames, if plotting</li>
 <li><strong>save_figure</strong> (<cite>bool</cite>, default <cite>false</cite>) – Whether to save plots (if doplot is on) for animation</li>
-<li><strong>density</strong> (<cite>float</cite>, default 50,) – Effective population size used</li>
+<li><strong>effectivepopsize</strong> (<cite>float</cite>, default 50,) – Effective population size used</li>
 <li><strong>oversample</strong> (<cite>int</cite>, default 10) – Spatiotemporal spiking resolution (relative to n); Spikes are
 sampled as a Poisson process using the active (A) intensity field
 upsampled by this factor.</li>
+<li><strong>efraction</strong> (<cite>float</cite>, default 0.05) – Fraction of cells within local region that are excited by
+spontaneous wave events.</li>
 </ul>
 </td>
 </tr>
