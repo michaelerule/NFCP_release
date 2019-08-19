@@ -28,15 +28,16 @@ find . -name "*.pyc" -exec rm -rf {} \; 2>/dev/null
 find . -name "*~" -exec rm -rf {} \;  2>/dev/null
 
 # Add any new files, add all updates to all files
-
 echo "Adding all changes"
 git add --all . 
 git add -u :/
 
-# Commit using the message specified as first argument to this script
+# Check that there are no files over 100M in this commit
+find -type f -size +100M -exec git rm --cached {} \;
 
+# Commit using the message specified as first argument to this script
 echo "Git commit"
-git commit -m "$1"
+git commit -m "… $1"
 
 # Synchronize with master on github
 echo "git pull"
