@@ -33,6 +33,7 @@ git add --all .
 git add -u :/
 
 # Check that there are no files over 100M in this commit
+echo "Removing files over 100mb"
 find -type f -size +100M -exec git rm --cached {} \;
 
 # Commit using the message specified as first argument to this script
