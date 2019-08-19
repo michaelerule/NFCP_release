@@ -17,32 +17,34 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -177,8 +179,6 @@
 <span class="sd">    may return negative intensities. Negative intensities are clipped to</span>
 <span class="sd">    0 for the purpose of point-process sampling.</span>
 
-<span class="sd">    TODO: model.event_rescale is funky.</span>
-
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    model : struct</span>
@@ -219,7 +219,7 @@
 <span class="sd">        Basis-projected spiking events, with rates normalized by</span>
 <span class="sd">        spatiotemporal volume.</span>
 <span class="sd">    simulatedM: `cell`, 1×Ntimes</span>
-<span class="sd">        Each cell array contains a MN² by 1 matrix of pacted states, where</span>
+<span class="sd">        Each cell array contains a MN² by 1 matrix of packed states, where</span>
 <span class="sd">        M is the number of states (species), and N is the size of the N×N</span>
 <span class="sd">        spatial basis, with N² basis elements total. Species are packed in</span>
 <span class="sd">        order, with the spatial values packed in Matlab&#39;s default</span>
@@ -315,8 +315,6 @@
 <span class="sd">    rates        = {}; % Store rate intensity field</span>
 <span class="sd">    saved_images = {}; % Store neural field images for later display</span>
 <span class="sd">    saved_means  = [];</span>
-
-<span class="sd">    model.complexlangevin = true;</span>
 
 <span class="sd">    for i=1:opt.Nsample</span>
 <span class="sd">        % sample spikes: interpolate field to get finer spatial resolution</span>
@@ -487,25 +485,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

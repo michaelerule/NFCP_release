@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="util package" href="util.html" />
     <link rel="prev" title="stateInfer " href="stateInfer.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -177,7 +179,6 @@ This does not support the dispersion parameter alpha. (uses alpha=1)</p>
 <p>This uses the complex Langevin equation (Schnoerr &amp; al. 2014), so it
 may return negative intensities. Negative intensities are clipped to
 0 for the purpose of point-process sampling.</p>
-<p>TODO: model.event_rescale is funky.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -209,7 +210,7 @@ Nspikes×2 matrix, where column 1 is the x location and column 2
 is the y location of each spike, in the [0,1]² box.</li>
 <li><strong>rates</strong> (<cite>cell</cite>, 1×Ntimes) – Basis-projected spiking events, with rates normalized by
 spatiotemporal volume.</li>
-<li><strong>simulatedM</strong> (<cite>cell</cite>, 1×Ntimes) – Each cell array contains a MN² by 1 matrix of pacted states, where
+<li><strong>simulatedM</strong> (<cite>cell</cite>, 1×Ntimes) – Each cell array contains a MN² by 1 matrix of packed states, where
 M is the number of states (species), and N is the size of the N×N
 spatial basis, with N² basis elements total. Species are packed in
 order, with the spatial values packed in Matlab’s default
@@ -291,7 +292,7 @@ location.</p>
         <a href="util.html" class="btn btn-neutral float-right" title="util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="stateInfer.html" class="btn btn-neutral" title="stateInfer " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="stateInfer.html" class="btn btn-neutral float-left" title="stateInfer " accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -317,25 +318,16 @@ location.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -23,8 +23,8 @@ def stateInfer(ini,model,xydata,true_states,varargin):
     model : `struct`
         pre-initialized model structure; see `initializeModel`
     true_states : `cell`, default `false`
-        Ground-truth states (if avaialable). If not available, defaults
-        to `false`.
+        Ground-truth states (if avaialable).
+        If unavailable, defaults to `false`.
 
     Other Parameters
     ----------------

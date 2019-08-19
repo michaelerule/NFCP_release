@@ -43,7 +43,6 @@ def noiseModel(model,M,P):
         end
         P = eye(model.dimension);
     end
-
     % Get number of spatial basis functions
     N = model.nn;
     % Linear, local rates are spatially homogeneous
@@ -51,12 +50,8 @@ def noiseModel(model,M,P):
     % Nonlinear, nonlocal rates
     RATES(1:N) = RATES(1:N) + excitatoryRate(model,M,P);
     % Integrate one time-step (independent, linear approximation)
-    %RATES = RATES;%;.*model.dt;
-    % Integration subsumed into model.noiseCov
-
-    if ~(isfield(model,'complexlangevin') && model.complexlangevin),
-        RATES(RATES<0) = 0;
-    end
+    RATES = RATES.*model.dt;
+    RATES(RATES<0) = 0;
 
     if model.sqrtform,
         % Return the square-root of the noise covariance matrix

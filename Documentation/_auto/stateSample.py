@@ -14,8 +14,6 @@ def sampleSates(model,varargin):
     may return negative intensities. Negative intensities are clipped to
     0 for the purpose of point-process sampling.
 
-    TODO: model.event_rescale is funky.
-
     Parameters
     ----------
     model : struct
@@ -56,7 +54,7 @@ def sampleSates(model,varargin):
         Basis-projected spiking events, with rates normalized by
         spatiotemporal volume.
     simulatedM: `cell`, 1×Ntimes
-        Each cell array contains a MN² by 1 matrix of pacted states, where
+        Each cell array contains a MN² by 1 matrix of packed states, where
         M is the number of states (species), and N is the size of the N×N
         spatial basis, with N² basis elements total. Species are packed in
         order, with the spatial values packed in Matlab's default
@@ -152,8 +150,6 @@ def sampleSates(model,varargin):
     rates        = {}; % Store rate intensity field
     saved_images = {}; % Store neural field images for later display
     saved_means  = [];
-
-    model.complexlangevin = true;
 
     for i=1:opt.Nsample
         % sample spikes: interpolate field to get finer spatial resolution

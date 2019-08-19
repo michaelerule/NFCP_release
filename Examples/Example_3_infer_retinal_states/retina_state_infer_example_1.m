@@ -45,9 +45,8 @@ model.ini_state_var = 1e02;  % Initial variance in state estimate
 model.ini_count_var = 1e-9;  % Initial variance for neuron count
 model.ini_reg_diag  = 1e-9;  % Initial variance added to diagonal
 model.reg_precision = 1e-9;  % Regularization for precision matrix
-
-model.alpha = 1;
-model.ss_rescale = 30;
+model.alpha         = 1;     % Dispersion parameter for spiking (1=Poisson)
+model.ss_rescale    = 30;    % Effective system-size scaling
 
 model = initializeModel(model);
 

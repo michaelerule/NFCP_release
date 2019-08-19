@@ -96,6 +96,32 @@ model = initializeModel(model);
     });
 
 %{
+Returned variables are: 
+
+ini : `matrix`, 
+    Packed initial conditions for mean concentrations. Species are
+    packed in the order defined by the model, where the second
+    species reflects the active "A" state. 
+
+xydata : `cell`, 1×Ntimes 
+    Cell array of spiking events. For each timepoint, we have a 
+    Nspikes×2 matrix, where column 1 is the x location and column 2 
+    is the y location of each spike, in the [0,1]² box.
+
+rates: `cell`, 1×Ntimes 
+    Basis-projected spiking events, with rates normalized by
+    spatiotemporal volume. 
+
+simulatedM: `cell`, 1×Ntimes 
+    Each cell array contains a MN² by 1 matrix of packed states, where 
+    M is the number of states (species), and N is the size of the N×N 
+    spatial basis, with N² basis elements total. Species are packed in 
+    order, with the spatial values packed in Matlab's default 
+    (column major) order. 
+%}
+
+
+%{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Infer states while animating
 %}
@@ -106,7 +132,6 @@ Infer states while animating
 model.rQA            = 0.0;
 model.linearRates(1) = 0.0;
 % Turn off finite threshold on means 
-% (this would be properly handled as truncated normal)
 model.thr            = 0.0;
 model.update         = 'Laplace'; % Measurement update method
 model.cutoff         = false

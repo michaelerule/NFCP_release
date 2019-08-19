@@ -51,7 +51,7 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
         Basis-projected spiking events, with rates normalized by
         spatiotemporal volume. 
     simulatedM: `cell`, 1×Ntimes 
-        Each cell array contains a MN² by 1 matrix of pacted states, where 
+        Each cell array contains a MN² by 1 matrix of packed states, where 
         M is the number of states (species), and N is the size of the N×N 
         spatial basis, with N² basis elements total. Species are packed in 
         order, with the spatial values packed in Matlab's default 

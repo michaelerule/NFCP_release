@@ -17,32 +17,34 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -206,7 +208,6 @@
 <span class="sd">        end</span>
 <span class="sd">        P = eye(model.dimension);</span>
 <span class="sd">    end</span>
-
 <span class="sd">    % Get number of spatial basis functions</span>
 <span class="sd">    N = model.nn;</span>
 <span class="sd">    % Linear, local rates are spatially homogeneous</span>
@@ -214,12 +215,8 @@
 <span class="sd">    % Nonlinear, nonlocal rates</span>
 <span class="sd">    RATES(1:N) = RATES(1:N) + excitatoryRate(model,M,P);</span>
 <span class="sd">    % Integrate one time-step (independent, linear approximation)</span>
-<span class="sd">    %RATES = RATES;%;.*model.dt;</span>
-<span class="sd">    % Integration subsumed into model.noiseCov</span>
-
-<span class="sd">    if ~(isfield(model,&#39;complexlangevin&#39;) &amp;&amp; model.complexlangevin),</span>
-<span class="sd">        RATES(RATES&lt;0) = 0;</span>
-<span class="sd">    end</span>
+<span class="sd">    RATES = RATES.*model.dt;</span>
+<span class="sd">    RATES(RATES&lt;0) = 0;</span>
 
 <span class="sd">    if model.sqrtform,</span>
 <span class="sd">        % Return the square-root of the noise covariance matrix</span>
@@ -273,25 +270,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

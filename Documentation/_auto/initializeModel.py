@@ -322,7 +322,7 @@ def initializeModel(model,varargin):
     % and rescale by gains
     bias    = adjbias ./ (netgain * model.volume);
     % Multiply rates by spatiotemporal volume and dispersion parameter
-    gain    = netgain * model.volume;% * model.alpha;
+    gain    = netgain * model.volume * model.alpha;
     bias(~isfinite(bias))=0.0;
     gain(~isfinite(gain))=0.0;
     model.adjusted_gain = gain;
@@ -457,9 +457,9 @@ def initializeModel(model,varargin):
         % the LNA at this finier spatial scale is expected to be less accurate.
         % This corresponds, effectively, to using a smaller population size,
         % which naturally has a larger error term in the system-size expansion)
-            model.ss = model.dx.*model.ss_rescale;
-            model.noiseCov = model.Sspatial;
-            model.noiseCov = sparse(model.noiseCov);
+        model.ss = model.dx.*model.ss_rescale;
+        model.noiseCov = model.Sspatial;
+        model.noiseCov = sparse(model.noiseCov);
     end
     % Adjust noise to reflect spatiotemporal basis function volume
     % We approximate the noise as the integral over space and time
