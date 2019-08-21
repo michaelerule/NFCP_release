@@ -18,6 +18,6 @@ Module contents
 ---------------
 
 .. automodule:: util
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

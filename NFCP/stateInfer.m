@@ -69,6 +69,9 @@ function [llsum,infstate,margvar,infe,sM,sP,sC] = stateInfer(ini,model,xydata,tr
         can cause new plots to be drawn to the wrong figure. 
     iniP : matrix
         Optional initial conditions for correlation structure
+    rescale : bool
+        Whether to normalize plot output to reflect the fraction of cells in   
+        each state, as opposed to the absolute number of cells.
         
     Returns
     -------
@@ -118,6 +121,7 @@ function [llsum,infstate,margvar,infe,sM,sP,sC] = stateInfer(ini,model,xydata,tr
         'usesurrogate' ,false, 'if true, pass surrogate likelihoods to Laplace-subpace'
         'getsurrogate' ,false, 'if true, get surrogate likelihoods from Laplace-subpace'
         'figure'       ,17   , 'figure number or handle to use; defaults to fig 17'
+        'rescale'      ,true , 'normalize plot to reflect fractions rather than absolut population size'
         }, varargin);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -76,17 +76,14 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
     
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Set up model for sampling (requires some special settings)
-    % Matlab does pass-by-reference with copy-on-write
-    % Changes to the model struct here remain local
-    model = initializeModel(model);
-
+    % Set up model for sampling 
     % For sampling the Langevin equation, noise is the same as that of the LNA
     % Square-root form makes sampling fluctuations simpler
+    model = initializeModel(model);
     model.method   = 'LNA';
     model.sqrtform = true;
     
-    % Check for legacy model definitions
+    % Check for old model definition format
     if isfield(model,'rQA'),
         r1 = model.linearRates(1);
         if r1~=model.rQA,
@@ -111,12 +108,10 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
     % local area. The effect must be rescaled for neuron effectivepopsize when the 
     % simulation grid scale is adjusted. This parameter not used for inference.
     
-    % Old behavior
-    % model.event_rescale = (model.n/20.0).^2;
-    % To reproduce old behavior with new parameters, set
-    % efraction = 0.04 ~= 0.25/(2*pi);
-
-    % Wave events excite 5% of the quiescent cells within a local region
+    % Old behavior: model.event_rescale = (model.n/20.0).^2;
+    % New behavior: Wave events excite opt.efraction*100% of the quiescent
+    %               cells within a local region
+    % To reproduce old behavior, let efraction = 0.04 ~= 0.25/(2*pi)
     model.event_rescale = 2*pi*(model.sigma.*model.n).^2.*opt.efraction;
     
     % Spontaneous excitation will be handeled separately.
@@ -128,11 +123,15 @@ function [ini,xydata,rates,simulatedM] = sampleSates(model,varargin)
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % initial condition of intensity fields
-    celleffectivepopsize = ones(1,model.n*model.n)*opt.effectivepopsize;
-    Q = celleffectivepopsize*0.9;  % Quiescent
-    A = celleffectivepopsize*0.05; % Active
-    R = celleffectivepopsize*0.05/(model.nstates-2); % Refractory
-    ini = [Q A kron(R,ones(1,(model.nstates-2)))];
+    if isfield(opt,'ini'),
+        ini = opt.ini;
+    else
+        celleffectivepopsize = ones(1,model.n*model.n)*opt.effectivepopsize;
+        Q = celleffectivepopsize*0.9;  % Quiescent
+        A = celleffectivepopsize*0.05; % Active
+        R = celleffectivepopsize*0.05/(model.nstates-2); % Refractory
+        ini = [Q A kron(R,ones(1,(model.nstates-2)))];
+    end
     M = ini;
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -2,6 +2,6 @@ matrix.assertPSD module
 =======================
 
 .. automodule:: matrix.assertPSD
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
