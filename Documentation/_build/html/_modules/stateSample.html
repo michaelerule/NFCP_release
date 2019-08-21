@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stateSample &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>stateSample</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stateSample</h1><div class="highlight"><pre>
+<span></span><span class="ch"></span>
+<span class="c1"></span>
+<div class="viewcode-block" id="sampleSates"><a class="viewcode-back" href="../stateSample.html#stateSample.sampleSates">[docs]</a><span class="k">def</span> <span class="nf">sampleSates</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">varargin</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    The function `sampleSates(model,varargin)` will sample the evolution</span>
+<span class="sd">    of the intensitiy fields and corresponding point-process observations</span>
+<span class="sd">    from a given model.</span>
+
+<span class="sd">    This does not support spatially inhomogeneous gain parameters.</span>
+<span class="sd">    This does not support the dispersion parameter alpha. (uses alpha=1)</span>
+
+<span class="sd">    This uses the complex Langevin equation (Schnoerr &amp; al. 2014), so it</span>
+<span class="sd">    may return negative intensities. Negative intensities are clipped to</span>
+<span class="sd">    0 for the purpose of point-process sampling.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : struct</span>
+<span class="sd">        pre-initialized model struct; see `initialiezModel`</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    Nsample : `int`, default 500</span>
+<span class="sd">        Number of time-points to sample</span>
+<span class="sd">    Nburn : `int`, default 200</span>
+<span class="sd">        Number of initial burn-in samples (to approach steady-state)</span>
+<span class="sd">    doplot : `bool`, default `false`</span>
+<span class="sd">        Whether to plot states while filtering</span>
+<span class="sd">    upscale : `int`, default 8</span>
+<span class="sd">        Amount of upsampling to perform on shown arrays, if plotting</span>
+<span class="sd">    skipsim : `int`, default 10</span>
+<span class="sd">        Skip every `skipsim` (&quot;skip-simulation&quot;) frames, if plotting</span>
+<span class="sd">    save_figure : `bool`, default `false`</span>
+<span class="sd">        Whether to save plots (if doplot is on) for animation</span>
+<span class="sd">    effectivepopsize : `float`, default 50,</span>
+<span class="sd">        Effective population size used</span>
+<span class="sd">    oversample : `int`, default 10</span>
+<span class="sd">        Spatiotemporal spiking resolution (relative to n); Spikes are</span>
+<span class="sd">        sampled as a Poisson process using the active (A) intensity field</span>
+<span class="sd">        upsampled by this factor.</span>
+<span class="sd">    efraction : `float`, default 0.05</span>
+<span class="sd">        Fraction of cells within local region that are excited by</span>
+<span class="sd">        spontaneous wave events.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ini : `matrix`,</span>
+<span class="sd">        Packed initial conditions for mean concentrations. Species are</span>
+<span class="sd">        packed in the order defined by the model, where the second</span>
+<span class="sd">        species reflects the active &quot;A&quot; state.</span>
+<span class="sd">    xydata : `cell`, 1×Ntimes</span>
+<span class="sd">        Cell array of spiking events. For each timepoint, we have a</span>
+<span class="sd">        Nspikes×2 matrix, where column 1 is the x location and column 2</span>
+<span class="sd">        is the y location of each spike, in the [0,1]² box.</span>
+<span class="sd">    rates: `cell`, 1×Ntimes</span>
+<span class="sd">        Basis-projected spiking events, with rates normalized by</span>
+<span class="sd">        spatiotemporal volume.</span>
+<span class="sd">    simulatedM: `cell`, 1×Ntimes</span>
+<span class="sd">        Each cell array contains a MN² by 1 matrix of packed states, where</span>
+<span class="sd">        M is the number of states (species), and N is the size of the N×N</span>
+<span class="sd">        spatial basis, with N² basis elements total. Species are packed in</span>
+<span class="sd">        order, with the spatial values packed in Matlab&#39;s default</span>
+<span class="sd">        (column major) order.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sa">r</span><span class="sd"></span>
+
+<span class="sd">    %|===== PARAM ====|=VAL=|= NOTE =|</span>
+<span class="sd">        &#39;efraction&#39;   ,0.05,&#39;Fraction Quiescent cells excited in spontaneous events&#39;</span>
+<span class="sd">    }, varargin);</span>
+
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Set up model for sampling</span>
+<span class="sd">    % For sampling the Langevin equation, noise is the same as that of the LNA</span>
+<span class="sd">    % Square-root form makes sampling fluctuations simpler</span>
+<span class="sd">    model = initializeModel(model);</span>
+<span class="sd">    model.method   = &#39;LNA&#39;;</span>
+<span class="sd">    model.sqrtform = true;</span>
+
+<span class="sd">    % Check for old model definition format</span>
+<span class="sd">    if isfield(model,&#39;rQA&#39;),</span>
+<span class="sd">        r1 = model.linearRates(1);</span>
+<span class="sd">        if r1~=model.rQA,</span>
+<span class="sd">            msg = &#39;model.rQA=%0.2f but model.linearRates(1)=%0.2f&#39;;</span>
+<span class="sd">            warning(sprintf(msg,model.rQA,r1));</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Effective event rate</span>
+<span class="sd">    model.event_rate = model.linearRates(1).*model.dt*model.dx;</span>
+<span class="sd">    if (model.event_rate&lt;1e-12),</span>
+<span class="sd">        warning(&#39;Event rate &lt;1e-12; is this intended?&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    if (model.event_rate&gt;0.1),</span>
+<span class="sd">        display(&#39;Warning: spontaneous rate too nigh to model as Poisson noise&#39;);</span>
+<span class="sd">        display(&#39;Increase resolution or reduce spontaneous rate?&#39;);</span>
+<span class="sd">        model.event_rate = min(max(1.0-exp(-model.event_rate),0.0),1.0);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % For simluation, spontaneous depolarization is modeled as shot noise</span>
+<span class="sd">    % which has a gain-like effect of increasing the Q-&gt;A transition in a</span>
+<span class="sd">    % local area. The effect must be rescaled for neuron effectivepopsize when the</span>
+<span class="sd">    % simulation grid scale is adjusted. This parameter not used for inference.</span>
+
+<span class="sd">    % Old behavior: model.event_rescale = (model.n/20.0).^2;</span>
+<span class="sd">    % New behavior: Wave events excite opt.efraction*100% of the quiescent</span>
+<span class="sd">    %               cells within a local region</span>
+<span class="sd">    % To reproduce old behavior, let efraction = 0.04 ~= 0.25/(2*pi)</span>
+<span class="sd">    model.event_rescale = 2*pi*(model.sigma.*model.n).^2.*opt.efraction;</span>
+
+<span class="sd">    % Spontaneous excitation will be handeled separately.</span>
+<span class="sd">    % Disable it here so it does not affect the mean update</span>
+<span class="sd">    model.linearRates(1) = 0.0;</span>
+
+<span class="sd">    % Re-initialize auxiliary variables to reflect new paramters</span>
+<span class="sd">    model = initializeModel(model);</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % initial condition of intensity fields</span>
+<span class="sd">    if isfield(opt,&#39;ini&#39;),</span>
+<span class="sd">        ini = opt.ini;</span>
+<span class="sd">    else</span>
+<span class="sd">        celleffectivepopsize = ones(1,model.n*model.n)*opt.effectivepopsize;</span>
+<span class="sd">        Q = celleffectivepopsize*0.9;  % Quiescent</span>
+<span class="sd">        A = celleffectivepopsize*0.05; % Active</span>
+<span class="sd">        R = celleffectivepopsize*0.05/(model.nstates-2); % Refractory</span>
+<span class="sd">        ini = [Q A kron(R,ones(1,(model.nstates-2)))];</span>
+<span class="sd">    end</span>
+<span class="sd">    M = ini;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Simulate neural field model</span>
+<span class="sd">    % Burn in to reach steady-state</span>
+<span class="sd">    for i=1:opt.Nburn</span>
+<span class="sd">        % Solve the model forward in time with known parameters</span>
+<span class="sd">        M = meanUpdate(model,M);</span>
+<span class="sd">        M = PoissonEvents(model,M);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % When plotting show all events since last displayed time point (so as not</span>
+<span class="sd">    % to give the false impression that the algorithm can infer fields from</span>
+<span class="sd">    % extremely sparse data)</span>
+<span class="sd">    last_frame = 1;</span>
+<span class="sd">    spatial_mean_projection = kron(eye(model.nstates),ones(1,model.nn))./model.nn;</span>
+<span class="sd">    % Build a projection matrix for computing confidence intervals</span>
+<span class="sd">    if opt.doplot,</span>
+<span class="sd">        opt.figure = figure(17);</span>
+<span class="sd">        NFCP_plotting.fix_figure(opt);</span>
+<span class="sd">        NFCP_plotting.centerfig(gcf,1200,350);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Remember the current state (initial conditions for sampling)</span>
+<span class="sd">    ini = M;</span>
+
+<span class="sd">    % Start recording (presumed at steady-state)</span>
+<span class="sd">    xydata       = {}; % Store simulated spiking observations</span>
+<span class="sd">    rates        = {}; % Store rate intensity field</span>
+<span class="sd">    saved_images = {}; % Store neural field images for later display</span>
+<span class="sd">    saved_means  = [];</span>
+
+<span class="sd">    for i=1:opt.Nsample</span>
+<span class="sd">        % sample spikes: interpolate field to get finer spatial resolution</span>
+<span class="sd">        [xydata{i},rates{i}] = sampleSpikes(model,M,opt);</span>
+<span class="sd">        simulatedM{i}        = M;</span>
+
+<span class="sd">        % Store states and spatial means for later display</span>
+<span class="sd">        means = spatial_mean_projection*M(:);</span>
+<span class="sd">        saved_means(i,1:model.nstates+1) = [means; sum(means)];</span>
+
+<span class="sd">        % Show plot of simulation state</span>
+<span class="sd">        if opt.doplot &amp;&amp; mod(i,opt.skipsim)==0</span>
+<span class="sd">            NFCP_plotting.fix_figure(opt);</span>
+<span class="sd">            newplot; hold off; subplot(131);</span>
+<span class="sd">            trueRGB = NFCP_plotting.fieldsToRGB(abs(M),model.n,model.cscale,opt.upscale);</span>
+<span class="sd">                sprintf(&#39;Simulating timepoint %d/%d&#39;,i,opt.Nsample));</span>
+<span class="sd">            % Show point events (if any) since last displayed frame</span>
+<span class="sd">            while last_frame&lt;=i,</span>
+<span class="sd">                if (size(xydata{last_frame},1)&gt;0)</span>
+<span class="sd">                    plot(xydata{last_frame}(:,1),xydata{last_frame}(:,2),&#39;.w&#39;,&#39;MarkerSize&#39;,12);</span>
+<span class="sd">                end</span>
+<span class="sd">                last_frame = last_frame+1;</span>
+<span class="sd">            end</span>
+<span class="sd">            % Plot average intensities over time</span>
+<span class="sd">            subplot(1,3,[2 3]);</span>
+<span class="sd">            times = (1:size(saved_means,1))*abs(model.dt);</span>
+<span class="sd">            plot(times,real(saved_means));</span>
+<span class="sd">            ta = max(0,times(end)-100);</span>
+<span class="sd">            xlim([ta,ta+100]);</span>
+<span class="sd">            xlabel(&#39;Time (seconds)&#39;);</span>
+<span class="sd">            ylabel(&#39;Mean concentration&#39;);</span>
+<span class="sd">            legend([model.names &#39;Total&#39;]);</span>
+<span class="sd">            hold off;</span>
+<span class="sd">            if opt.save_figure,</span>
+<span class="sd">                NFCP_plotting.save_figure(i,false,trueRGB,opt);</span>
+<span class="sd">            end</span>
+<span class="sd">            fr=getframe(gcf);</span>
+<span class="sd">            clear fr;</span>
+<span class="sd">            hold off;</span>
+<span class="sd">        end</span>
+
+
+<span class="sd">        % Solve the model forward in time with known parameters</span>
+<span class="sd">        % Use linear noise approximation to generate fluctuations</span>
+<span class="sd">        M = meanUpdate(model,M);</span>
+<span class="sd">        L = noiseModel(model,M);</span>
+<span class="sd">        noise = L*randn(model.nn*model.ntransitions,1);</span>
+<span class="sd">        M = M + noise;</span>
+<span class="sd">        M = PoissonEvents(model,M);</span>
+<span class="sd">    end</span>
+<span class="sd">end</span>
+
+
+</div>
+<div class="viewcode-block" id="PoissonEvents"><a class="viewcode-back" href="../stateSample.html#stateSample.PoissonEvents">[docs]</a><span class="k">def</span> <span class="nf">PoissonEvents</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">M</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Add random depolarizatoins as shot noise (Poisson process)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : struct</span>
+<span class="sd">        pre-initialized model struct; see `initialiezModel`</span>
+<span class="sd">    M : vector</span>
+<span class="sd">        vector of mean intensities</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    M : vector</span>
+<span class="sd">        updated vector of mean intentities with random excitation events</span>
+<span class="sd">        applied</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sa">r</span><span class="sd"></span>
+<span class="sd">    N = model.nn;</span>
+<span class="sd">    Q = M(1:N);</span>
+<span class="sd">    A = M(N+1:2*N);</span>
+<span class="sd">    blurred = reshape(model.blur(rand(model.n)&lt;model.event_rate)*model.event_rescale,model.nn,1);</span>
+<span class="sd">    events  = blurred(:).*Q(:);</span>
+<span class="sd">    M(1:N)     = Q(:)-events;</span>
+<span class="sd">    M(N+1:2*N) = A(:)+events;</span>
+<span class="sd">end</span>
+
+
+</div>
+<div class="viewcode-block" id="sampleSpikes"><a class="viewcode-back" href="../stateSample.html#stateSample.sampleSpikes">[docs]</a><span class="k">def</span> <span class="nf">sampleSpikes</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">opt</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Sample spikes from 2D intensity fields (uses the second field, by</span>
+<span class="sd">    convention termed the `A` or active-state field).</span>
+
+<span class="sd">    This does not support spatially inhomogeneous gain parameters.</span>
+<span class="sd">    This does not support the dispersion parameter alpha.</span>
+
+<span class="sd">    This actually does Bernoulli sampling, but on a spatially upsampled</span>
+<span class="sd">    domain where the Poisson process can be approximated as Bernoilli.</span>
+
+<span class="sd">    The purpose of this is to sample a single spike at each spatial</span>
+<span class="sd">    location.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : struct</span>
+<span class="sd">        pre-initialized model struct; see `initialiezModel`</span>
+<span class="sd">    M : vector</span>
+<span class="sd">        vector of mean intensities</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    spikes : 2d array</span>
+<span class="sd">        Array of spiking (x,y) locations</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sd"></span>
+<span class="sd">    N = model.nn;</span>
+<span class="sd">    A = M(N+1:2*N);</span>
+<span class="sd">    if strcmp(model.link,&#39;linear&#39;),</span>
+<span class="sd">        x = A;</span>
+<span class="sd">    elseif strcmp(model.link,&#39;log&#39;),</span>
+<span class="sd">        x = exp(A);</span>
+<span class="sd">    elseif strcmp(model.link,&#39;squared&#39;),</span>
+<span class="sd">        x = A.^2;</span>
+<span class="sd">    end</span>
+<span class="sd">    % volume  = model.dt.*model.dx.*model.gain;</span>
+<span class="sd">    % rate    = volume.*max(0,real(A));</span>
+<span class="sd">    gain    = model.inhomogeneous_gain.*(model.gain*model.volume);</span>
+<span class="sd">    rate    = gain.*max(0,real(A));</span>
+<span class="sd">    upfield = imresize(reshape(rate,model.n,model.n),opt.oversample);</span>
+<span class="sd">    bias    = model.bias.*model.volume;</span>
+<span class="sd">    if all(size(model.bias)==[1 1]),</span>
+<span class="sd">        upfieldadj = upfield+bias</span>
+<span class="sd">    else,</span>
+<span class="sd">        bias       = imresize(reshape(bias,model.n,model.n),opt.oversample);</span>
+<span class="sd">        upfieldadj = upfield+bias;</span>
+<span class="sd">    end</span>
+<span class="sd">    [y,x]  = find(rand(size(upfieldadj))&lt;upfieldadj.*opt.oversample.^-2);</span>
+<span class="sd">             (rand(size(x,1),2)-0.5)./(model.n*opt.oversample),1),0);</span>
+<span class="sd">end</span>
+
+
+
+</div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -37,4 +37,5 @@ ifelse = @(b,t,f) evaluate(select(b,t,f));
 % safe cell2mat
 any2mat = @(x) ifelse(iscell(x),@()cell2mat(x),@()x); 
 
-
+% inline argmax
+argmax = @(x) find(x==max(x));

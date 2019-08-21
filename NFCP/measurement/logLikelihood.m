@@ -16,13 +16,13 @@ function [loglikelihood] = logLikelihood(model,M,P,x,pP,y)
     
     Returns
     -------
-    loglikelihood : scalar or vector depending on settings
+    loglikelihood : scalar || vector depending on settings
+    
     %}
     
     
     %{
-    extract gains and biases
-    
+    extract gains and biases:
     +--------------------------+-------------------------------------------+
     | Variable                 | Units                                     | 
     +==========================+===========================================+
@@ -77,10 +77,10 @@ function [loglikelihood] = logLikelihood(model,M,P,x,pP,y)
     % This computes a curvature correction based on the likelihood
     % curvature at the posterior mean.
     %
-    % xb: the posterior rates, bias adjusted
-    % xr: the posterior rates, bias and gain adjusted
+    % xb        : the posterior rates, bias adjusted
+    % xr        : the posterior rates, bias and gain adjusted
     % lpyx2Post : the curvature at the posterior mode
-    % xrPrior : the bias/gain adjusted rates at the PROIR mean
+    % xrPrior   : the bias/gain adjusted rates at the PROIR mean
     if strcmp(model.link,'linear'),
         % Calculate for the prior mean
         xbPrior           = priorMeanA + bias;
@@ -143,8 +143,8 @@ function [loglikelihood] = logLikelihood(model,M,P,x,pP,y)
     %{
     Possible likelihood approximations combine various approximations 
     of the data likelihood, and any penalties for inaccurate state 
-    predictions reflected in a large change between the prior state
-    estimate and the posterior state estimate after measurement. 
+    predictions (reflected in a large change between the prior state
+    estimate and the posterior state estimate after measurement.)
     %}
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -219,60 +219,73 @@ function [loglikelihood] = logLikelihood(model,M,P,x,pP,y)
     logdetRatio = logdetPrior - logdetPost;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+    % Maximum likelihood
+    if any(strcmp({'ML','ELBO','all'},model.likemethod)),
+        % <log Pr(Y|A) >_Q(a) can be computed via second-order approximation
+        % using the previously calculated likelihood and curvature at the
+        % POSTERIOR mean.
+        logPyaQ = lpyx0Post + correctionPost;
+        logPyaQ(~isfinite(logPyaQ)) = 0.0;
+        logPyaQ = sum(logPyaQ);
+    end
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Likelihood via KL divergence of P from Q (ELBO)
-    % log Py >= <log Py|a>_Q - Dkl(Q||Pr(A))
-    % D_{KL}(Q || Pr(A)) can be computed exactly 
-    DklQPa  = 0.5.*(logdetRatio - D + tracePriorPost + priorQuadratic);
-    
-    % <log Pr(Y|A) >_Q(a) can be computed via second-order approximation
-    % using the previously calculated likelihood and curvature at the
-    % POSTERIOR mean.
-    logPyaQ = lpyx0Post + correctionPost;
-    logPyaQ(~isfinite(logPyaQ)) = 0.0;
-    logPyaQ = sum(logPyaQ);
-    % Evidence lower bound is the expected log-likelihood under posterior Q
-    % minus KL divergence of prior Pr(A) from Q
-    ELBO = logPyaQ - DklQPa;
-    
+    if any(strcmp({'ELBO','all'},model.likemethod)),
+        % log Py >= <log Py|a>_Q - Dkl(Q||Pr(A))
+        % D_{KL}(Q || Pr(A)) can be computed exactly 
+        DklQPa  = 0.5.*(logdetRatio - D + tracePriorPost + priorQuadratic);
+        % Evidence lower bound is the expected log-likelihood under posterior Q
+        % minus KL divergence of prior Pr(A) from Q
+        ELBO = logPyaQ - DklQPa;
+    end
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Expected log-likelihood approach (ELL)
-    % log Py ~ <logPy|a>_Pa + Dkl(Pr(A)||Q)
-    % D_{KL}(Pr(A) || Q) can be computed exactly 
-    DklPaQ  = 0.5.*(-logdetRatio - D + tracePostPrior + postQuadratic);
-    % <log Pr(Y|A) >_P(a) can be computed via second-order approximation
-    % using the previously calculated likelihood and curvature at the
-    % PRIOR mean.
-    logPyaPa = lpyx0Prior + correctionPrior;
-    logPyaPa(~isfinite(logPyaPa)) = 0.0;
-    logPyaPa = sum(logPyaPa);
-    % Expected log-likelihood under Prior Pr(A) plus KL divergence of prior
-    % Q from Pr(A)
-    ELL = logPyaPa + DklPaQ;
-    
+    if any(strcmp({'ELL','all'},model.likemethod)),
+        % log Py ~ <logPy|a>_Pa + Dkl(Pr(A)||Q)
+        % D_{KL}(Pr(A) || Q) can be computed exactly 
+        DklPaQ  = 0.5.*(-logdetRatio - D + tracePostPrior + postQuadratic);
+        % <log Pr(Y|A) >_P(a) can be computed via second-order approximation
+        % using the previously calculated likelihood and curvature at the
+        % PRIOR mean.
+        logPyaPa = lpyx0Prior + correctionPrior;
+        logPyaPa(~isfinite(logPyaPa)) = 0.0;
+        logPyaPa = sum(logPyaPa);
+        % Expected log-likelihood under Prior Pr(A) plus KL divergence of prior
+        % Q from Pr(A)
+        ELL = logPyaPa + DklPaQ;
+    end
+        
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Laplace approximated likelihoods (at prior and posterior mean)
-    % Compute posterior Laplace-approximated liklihood
-    lgPyLaplaceAtPostprior = -0.5.*(logdetRatio + priorQuadratic);
-    lgPyLaplaceAtPost = lgPyLaplaceAtPostprior + sum(lpyx0Post);
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Return all variants of likelihood estimate
-    loglikelihood = [ELBO,ELL,lgPyLaplaceAtPost]';
-    
+    if any(strcmp({'Laplace','all'},model.likemethod)),
+        % Compute posterior Laplace-approximated liklihood
+        lgPyLaplaceAtPostprior = -0.5.*(logdetRatio + priorQuadratic);
+        lgPyLaplaceAtPost = lgPyLaplaceAtPostprior + sum(lpyx0Post);
+    end
+
     if strcmp(model.likemethod,'ML'),
         loglikelihood = [logPyaQ]';
+
     elseif strcmp(model.likemethod,'Laplace'),
         loglikelihood = [lgPyLaplaceAtPost]';
+
     elseif strcmp(model.likemethod,'ELBO'),
         loglikelihood = [ELBO]';
+
     elseif strcmp(model.likemethod,'ELL'),
         loglikelihood = [ELL]';
+
+    elseif strcmp(model.likemethod,'all'),
+        % Return all variants of likelihood estimate
+        loglikelihood = [ELBO,ELL,logPyaQ,lgPyLaplaceAtPost]';
+
     elseif strcmp(model.likemethod,'debug'),
         % Components of variational likelihood separated
         loglikelihood = [logPyaQ,-DklQPa]';
     else
-        error('likelihood method should be laplace, ELBO, ELL, or debug');
+        error('likelihood method should be laplace, ELBO, ELL, all, || debug');
     end
        
     assert(all(~isnan(loglikelihood)));

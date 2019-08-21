@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>initializeModel &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>initializeModel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for initializeModel</h1><div class="highlight"><pre>
+<span></span><span class="ch"></span>
+<span class="c1"></span>
+<div class="viewcode-block" id="initializeModel"><a class="viewcode-back" href="../initializeModel.html#initializeModel.initializeModel">[docs]</a><span class="k">def</span> <span class="nf">initializeModel</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">varargin</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Precompute commonly used values and initialize the model.</span>
+
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | Variable                 | Units                                     | Description                    |</span>
+<span class="sd">    +==========================+===========================================+================================+</span>
+<span class="sd">    | model.dt                 | seconds      /   bin_t                    | Time-step                      |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.n                  | bin_x        /   array_x                  | Spatial discretization n×n     |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.nn                 | bin_x²       /   array_x²                 | No. bins in model (n²)         |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.dx                 | array_x²     /   bin_x²                   | Region spatial volume          |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.volume             | s∙array_x²   /   bin_x²∙bin_t             | Spatiotemporal volume (normd.) |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.bias               | spikes       /   bin_x²∙bin_t             | Baseline firing rate           |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.gain               | spikes       /   s∙array_x²               | Firing rate gain               |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.alpha              | spike mean   /   spike standard dev.      | Spike count dispersion         |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.sigma              | array_x (1=linear size of array)          | Nonlocal interaction scale     |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.linearRates        | 1/neuron/s                                | Transition rates               |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.rAA                | 1/neuron²/s (1/fraction²/s if normalized) | Excito-excitatory rate         |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.inhomogeneous_gain | unitless                                  | Local gain adjustment          |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.adjusted_bias      | unitless                                  | Local baseline rates           |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | model.adjusted_gain      | alpha∙spikes /   bin_x²∙bin_t             | Gain in units of spike density |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+<span class="sd">    | rate (inside obj. fun.)  | spikes       /   bin_x²∙bin_t             | Rate used for inference        |</span>
+<span class="sd">    +--------------------------+-------------------------------------------+--------------------------------+</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    Please see example scripts for details; this is an example of the</span>
+<span class="sd">    a defined linear transition model. ::</span>
+
+<span class="sd">        % Transition rates</span>
+<span class="sd">        model.names = strsplit(&#39;Q A R1 R2&#39;);</span>
+
+<span class="sd">        %    Q  A  R1  R2  rate</span>
+<span class="sd">        model.description = [</span>
+<span class="sd">            -1  1   0   0  2e-1 % spontaneous excitation</span>
+<span class="sd">             0 -1   1   0  3e-1 % slow refractory loop</span>
+<span class="sd">             0 -1   0   1  1e-1 % fast refractory loop</span>
+<span class="sd">             1  0  -1   0  3e-4 % slow refractory recovery</span>
+<span class="sd">             1  0   0  -1  1e-2 % fast refractory recovery</span>
+<span class="sd">             ];</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : struct</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    method : `string`, default &#39;momentClosure&#39;</span>
+<span class="sd">        State inference method to use. Can be `&#39;momentClosure&#39;` or `&#39;LNA&#39;`</span>
+<span class="sd">    dt : `float`, default 1.0</span>
+<span class="sd">        Time resolution of sampled; For state or model inference, point-</span>
+<span class="sd">        process data should be binned at resolution `dt`</span>
+<span class="sd">    n : `int`, default 10</span>
+<span class="sd">        Resolution of the `n x n` grid of basis functions onto which the</span>
+<span class="sd">        continuous system is projects. Recommended no smaller than `7 x 7`</span>
+<span class="sd">    gain : `float`, default 1</span>
+<span class="sd">        Global model gain parameter. By convention the second model state</span>
+<span class="sd">        is interpreted as the active (A) state. The intensity of this state</span>
+<span class="sd">        is multiplied by `gain` to estimate the expected number of events</span>
+<span class="sd">        (spikes) observed.</span>
+<span class="sd">    bias : `float` or `vector`, default 0</span>
+<span class="sd">        Per-channel region in the point-process intensity. Can be a scalar.</span>
+<span class="sd">        If a vector, should have one entry for every region in the `n x n`</span>
+<span class="sd">        simulation grid.</span>
+<span class="sd">    alpha : `float`, default 1</span>
+<span class="sd">        Parameter controlling the dispersion of the count process.</span>
+<span class="sd">        `alpha=1` is Poisson. Equal to the reciprocal of the fano factor.</span>
+<span class="sd">    cutoff : `bool`, default true</span>
+<span class="sd">        Whether to let the interaction length (`model.sigma`) set the</span>
+<span class="sd">        minimum spatial resolution of the model. If `true`, spatial</span>
+<span class="sd">        frequencies will be attenuated by `model.sigma`.</span>
+<span class="sd">    reg_state_var : `float`, default 1e-3</span>
+<span class="sd">        Covariance matrix regularization parameter (additive noise).</span>
+<span class="sd">        Regularization orthogonal to neuron counts and spatial correlations</span>
+<span class="sd">    reg_count_var : `float`, default 1e-8</span>
+<span class="sd">        Covariance matrix regularization parameter (additive noise).</span>
+<span class="sd">        Regularization orthogonal to spatial correlations</span>
+<span class="sd">    reg_diag : `float`, default 1e-8</span>
+<span class="sd">        Covariance matrix regularization parameter (additive noise).</span>
+<span class="sd">        Diagonal regularization&#39;</span>
+<span class="sd">    reg_inverse : `float`, default 1e-3</span>
+<span class="sd">        Precision matrix regularization. Should remain small to avoid</span>
+<span class="sd">        under-estimating model variance.</span>
+<span class="sd">        Diagonal regularization for recovering covariances for moment closure</span>
+<span class="sd">    interpolate : `bool`, default true</span>
+<span class="sd">        Whether to use interpolation when binning spikes to basis elements</span>
+<span class="sd">    ss_rescale : `float`, default 1.0</span>
+<span class="sd">        Effective system-size re-scaling; multiplies noise levels. Combine</span>
+<span class="sd">        with `model.normalized=true` to run inference using normalized</span>
+<span class="sd">        population densities, with the noise adjusted by `ss_rescale`</span>
+<span class="sd">    maxiter : `int`, default 20</span>
+<span class="sd">        Newton-Raphson iteractions in measurement update</span>
+<span class="sd">    link : `string`, default &#39;linear&#39;</span>
+<span class="sd">        Reserved option for incorporating new observation models;</span>
+<span class="sd">        onlt `linear` is supported at the moment.</span>
+<span class="sd">    llreg : `float`, default 0.0</span>
+<span class="sd">        Default is no regularization for log-Determinant in likelihood;</span>
+<span class="sd">        These should be positive-definite anyway.</span>
+<span class="sd">    tol : `float`, default 1e-6</span>
+<span class="sd">        Measurement convergence tolerance</span>
+<span class="sd">    minrate : `float`, default 1e-6</span>
+<span class="sd">        Minimum intensity in measurement update</span>
+<span class="sd">    L2penalty : `float`, default 1e-14</span>
+<span class="sd">        L2 penalty on intensities of model</span>
+<span class="sd">    sqrtform : `bool`, default true</span>
+<span class="sd">        Whether to use square-root filter updates when possible</span>
+<span class="sd">    normalized : `bool`, default false</span>
+<span class="sd">        Whether local intensities should be constrained to always sum to 1</span>
+<span class="sd">    quantize : `bool`, default true</span>
+<span class="sd">        Round parameters to finite sigfigs to facilitate caching</span>
+<span class="sd">    nsigfig : `int&gt;0`, default 3</span>
+<span class="sd">        No sigfigs; smaller=more cache retrievals, but less accurate</span>
+<span class="sd">    safety : `int`, default 1</span>
+<span class="sd">        Safety level; 0=unchecked, 1=patch, 2=patch and warn, 3=abort</span>
+<span class="sd">    verbosity : `int`, default 0</span>
+<span class="sd">        Logging level; 0=nothing, 1=limited, 2=verbose, 3=very verbose</span>
+<span class="sd">    ini_state_var : `float`, default `model.reg_state_var`</span>
+<span class="sd">        Initial covariance, uncertainty in state</span>
+<span class="sd">    ini_count_var : `float`, default `model.reg_count_var`</span>
+<span class="sd">        Initial covariance, uncertainty in population count</span>
+<span class="sd">    ini_reg_diag : `float`, default `model.reg_diag`</span>
+<span class="sd">        Initial covariance, diagonal regularizer</span>
+<span class="sd">    reg_precision : `float`, default `model.reg_diag`</span>
+<span class="sd">        Setting precision regularization to match covariance reguarlization</span>
+<span class="sd">        TODO: this doesn&#39;t sound right; FIX</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    struct</span>
+<span class="sd">        Model struct with auxiliary variables initialized.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="sd"></span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Set defaults for optinal variables if they are not yet defined</span>
+
+<span class="sd">    if numel(varargin)&gt;0,</span>
+<span class="sd">        model = applyOptions(model,varargin);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Mandatory Parameters</span>
+<span class="sd">    % Failure to specify model rate parameters, threshold, or interaction length is an error</span>
+<span class="sd">    if ~isfield(model,&#39;rAA&#39;  ),</span>
+<span class="sd">        error(&#39;Please define model.rAA, the strength of excito-excitatory interactions&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    if ~isfield(model,&#39;thr&#39;  ),</span>
+<span class="sd">        error(&#39;Please define model.thr, the finite excitation threshold&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    if ~isfield(model,&#39;sigma&#39;),</span>
+<span class="sd">        error(&#39;Please define model.sigma, the lateral interaction length&#39;);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    %|=== PARAMETER ===|= DEFAULT VALUE =|===== NOTE ======|</span>
+<span class="sd">        % Optional Parameters: State space method and spatiotemporal grid have defined defaults</span>
+<span class="sd">        &#39;method&#39;       ,&#39;momentClosure&#39;,&#39;(can also be LNA)&#39;</span>
+<span class="sd">        &#39;dt&#39;           ,1.0      ,&#39;&#39;</span>
+<span class="sd">        &#39;n&#39;            ,10       ,&#39;&#39;</span>
+<span class="sd">        % Optional Parameters: Observation model defaults to tracking density of Active cells</span>
+<span class="sd">        &#39;gain&#39;         ,1        ,&#39;&#39;</span>
+<span class="sd">        &#39;bias&#39;         ,0        ,&#39;&#39;</span>
+<span class="sd">        &#39;gamma&#39;        ,1        ,&#39;Exponentiate biases; used to tune log-link model&#39;</span>
+<span class="sd">        &#39;alpha&#39;        ,1        ,&#39;(Poisson).&#39;</span>
+<span class="sd">        % Optional Parameters: regularization</span>
+<span class="sd">        &#39;cutoff&#39;       ,false    ,&#39;(interaction length sets minimum scale).&#39;</span>
+<span class="sd">        &#39;reg_state_var&#39;,1e-5     ,&#39;Regularize orthogonal to pop. size &amp; spatial correlation&#39;</span>
+<span class="sd">        &#39;reg_count_var&#39;,1e-8     ,&#39;Regularization orthogonal to spatial correlations&#39;</span>
+<span class="sd">        &#39;reg_diag&#39;     ,1e-8     ,&#39;Diagonal regularization&#39;</span>
+<span class="sd">        &#39;reg_inverse&#39;  ,1e-5     ,&#39;Diagonal regularization for covariance inverse&#39;</span>
+<span class="sd">        &#39;interpolate&#39;  ,true     ,&#39;Use interpolation when binning spikes to basis elements?&#39;</span>
+<span class="sd">        &#39;ss_rescale&#39;   ,1.0      ,&#39;Inverse system-size parameter; multiplies noise levels&#39;</span>
+<span class="sd">        % Measurement update configuration</span>
+<span class="sd">        &#39;link&#39;         ,&#39;linear&#39; ,&#39;link function for observation&#39;</span>
+<span class="sd">        &#39;update&#39;       ,&#39;Laplace&#39;,&#39;Measurement update algorithm; only Laplace supported presently&#39;</span>
+<span class="sd">        &#39;likemethod&#39;   ,&#39;ML&#39;     ,&#39;only maximum-likelihood (ML) is supported at this time&#39;</span>
+<span class="sd">        &#39;dolikelihood&#39; ,true     ,&#39;Set to false to skip computing likelihood&#39;</span>
+<span class="sd">        % Newton-Raphson convergence control and regularization parameters</span>
+<span class="sd">        &#39;llreg&#39;        ,0.0      ,&#39;No regularization for log-Determinant in likelihood&#39;</span>
+<span class="sd">        &#39;tol&#39;          ,1e-4     ,&#39;Measurement convergence tolerance&#39;</span>
+<span class="sd">        &#39;minrate&#39;      ,1e-4     ,&#39;Minimum intensity in measurement update&#39;</span>
+<span class="sd">        &#39;L2penalty&#39;    ,1e-12    ,&#39;L2 penalty on intensities of model (unused; TODO: remove)&#39;</span>
+<span class="sd">        % Other runtime parameters</span>
+<span class="sd">        &#39;sqrtform&#39;     ,false    ,&#39;Use square-root filter updates when possible?&#39;</span>
+<span class="sd">        &#39;normalized&#39;   ,false    ,&#39;Constrain intensities to always sum to 1?&#39;</span>
+<span class="sd">        &#39;safety&#39;       ,1        ,&#39;Safety 0=none, 1=patch, 2=warn, 3=abort&#39;</span>
+<span class="sd">        &#39;verbosity&#39;    ,0        ,&#39;Logging 0=none, 1=some, 2=verbose, 3=highest&#39;</span>
+<span class="sd">        &#39;cscale&#39;       ,false    ,&#39;Separate scales for each species&#39;</span>
+<span class="sd">        };</span>
+<span class="sd">    model = applyOptions(defaults, model);</span>
+<span class="sd">        % Optional Parameters: regularization</span>
+<span class="sd">        &#39;ini_state_var&#39;,model.reg_state_var,&#39;Using regularization noise covariance as initial covariance&#39;</span>
+<span class="sd">        &#39;ini_count_var&#39;,model.reg_count_var,&#39;Using regularization noise covariance as initial covariance&#39;</span>
+<span class="sd">        &#39;ini_reg_diag&#39; ,model.reg_diag     ,&#39;Using regularization noise covariance as initial covariance&#39;</span>
+<span class="sd">        &#39;reg_precision&#39;,model.reg_diag     ,&#39;Setting precision regularization to match covariance reguarlization&#39;</span>
+<span class="sd">        };</span>
+<span class="sd">    model = applyOptions(defaults, model);</span>
+
+<span class="sd">    % Check and warn if there are untested/unstable settings</span>
+<span class="sd">    % Check the likelihood estimator</span>
+<span class="sd">    % We&#39;ve had some trouble with the prior contribution introducing</span>
+<span class="sd">    % a significant bias in parameter estimates. We believe this is due</span>
+<span class="sd">    % to the model being weakly identifiable, owing to sloppiness and a</span>
+<span class="sd">    % large unobserved state space. The effect of the prior is to bias</span>
+<span class="sd">    % parameters in a way that might not respect the true system</span>
+<span class="sd">    if ~strcmp(model.likemethod,&#39;ML&#39;),</span>
+<span class="sd">        warning([&#39;Only maximum likelihood (ML) supported; &quot;&#39; model.likemethod &#39;&quot; untested&#39;]);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Logging levels :</span>
+<span class="sd">    if     model.safety&lt;=1, model.error = @(s)[];   % do nothing (silent)</span>
+<span class="sd">    elseif model.safety==2, model.error = @warning; % print warning</span>
+<span class="sd">    elseif model.safety==3, model.error = @error;   % raise error</span>
+<span class="sd">    end</span>
+
+<span class="sd">    if model.safety&gt;2</span>
+<span class="sd">        % We will move to specifying linear reactions as a matrix</span>
+<span class="sd">        % These are checked here for backwards compatibility / migration</span>
+<span class="sd">        if isfield(model,&#39;rQA&#39;  ), warning(&#39;model.rQA is defined but not used&#39;); end</span>
+<span class="sd">        if isfield(model,&#39;rAR&#39;  ), warning(&#39;model.rAR is defined but not used&#39;); end</span>
+<span class="sd">        if isfield(model,&#39;rRQ&#39;  ), warning(&#39;model.rRQ is defined but not used&#39;); end</span>
+<span class="sd">        if model.sigma*model.n&lt;0.4,</span>
+<span class="sd">            model.error(&#39;Interaction radius finer than grid resolution&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Parse the model.description matrix</span>
+<span class="sd">    if isfield(model,&#39;linearRates&#39;) &amp;&amp; isfield(model,&#39;linearTransitions&#39;),</span>
+<span class="sd">        if model.verbosity&gt;0 &amp;&amp; isfield(model,&#39;description&#39;),</span>
+<span class="sd">            &#39;defined; using the latter.\n&#39;]);</span>
+<span class="sd">        end</span>
+<span class="sd">        model.linearRates  = model.linearRates(:);</span>
+<span class="sd">        model.nstates      = size(model.linearTransitions,1);</span>
+<span class="sd">        model.ntransitions = size(model.linearTransitions,2);</span>
+<span class="sd">        assert (size(model.linearRates,1)==model.ntransitions);</span>
+<span class="sd">    elseif isfield(model,&#39;description&#39;),</span>
+<span class="sd">        if model.verbosity&gt;0,</span>
+<span class="sd">            if isfield(model,&#39;linearRates&#39;),</span>
+<span class="sd">                &#39;but missing linearTransitions. Using description matrix\n&#39;]);</span>
+<span class="sd">            end</span>
+<span class="sd">            if isfield(model,&#39;linearRates&#39;),</span>
+<span class="sd">                &#39;but missing linearRates. Using description matrix\n&#39;]);</span>
+<span class="sd">            end</span>
+<span class="sd">        end</span>
+<span class="sd">        model.ntransitions      = size(model.description,1);</span>
+<span class="sd">        model.nstates           = size(model.description,2)-1;</span>
+<span class="sd">        model.linearRates       = model.description(1:end,model.nstates+1);</span>
+<span class="sd">        model.linearTransitions = model.description(1:end,1:model.nstates)&#39;;</span>
+
+<span class="sd">    else</span>
+<span class="sd">        error(&#39;Please specify either model.description or model.linearRates and model.linearTransitions&#39;);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    excitatory_reaction = [-1 1 zeros(1,model.nstates-2)]&#39;;</span>
+<span class="sd">    reverse_excitatory_reaction = [1 -1 zeros(1,model.nstates-2)]&#39;;</span>
+<span class="sd">         all(model.linearTransitions(1:end,1)==reverse_excitatory_reaction)),</span>
+<span class="sd">            &#39;reaction represents the Q to A transition.\n\n&#39;]);</span>
+<span class="sd">        error(&#39;Invalid reaction description&#39;);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Depends on model.linearRates</span>
+<span class="sd">    model.Rlin         = model.linearTransitions*diag(model.linearRates)*(model.linearTransitions&lt;0)&#39;;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % auxiliary variables</span>
+<span class="sd">    model.dx     = model.n.^-2;      % Volume of each basis element (grid square)</span>
+<span class="sd">    model.nn     = model.n*model.n; % Total number of spatial basis elements</span>
+<span class="sd">    model.Inn    = eye(model.nn);   % Identity matrix for single-population</span>
+<span class="sd">    model.volume = model.dx * abs(model.dt);</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Initialize observation model</span>
+<span class="sd">    % Several variables interact to generate observed (expected) spikes</span>
+
+<span class="sd">    % model.alpha is a dispersion parameter to account for non-poisson</span>
+<span class="sd">    % firing. It is equal to one-over-the-square-root of the fano factor.</span>
+<span class="sd">    % Poisson processes will have a fano factor of 1 (and an alpha of 1)</span>
+<span class="sd">    % Rhythmic spiking will have a fano factor less than 1, and an alpha</span>
+<span class="sd">    % greater than one. Irregular bursting can have a fano factor larger</span>
+<span class="sd">    % than one, and an alpha less than one.</span>
+<span class="sd">    % Latent rates should be multiplied by alpha (and the gain)</span>
+
+<span class="sd">    if ~isfield(model,&#39;inhomogeneous_gain&#39;),</span>
+<span class="sd">        model.inhomogeneous_gain = ones(model.n.^2,1);</span>
+<span class="sd">    end</span>
+<span class="sd">    if any(model.gain&lt;0.0),</span>
+<span class="sd">        error(&#39;All observation gain parameters must be positive&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    if any(model.inhomogeneous_gain&lt;0.0),</span>
+<span class="sd">        error(&#39;All observation gain parameters must be positive&#39;);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    model.goodchannels = (model.gain.*model.inhomogeneous_gain)&gt;0.0;</span>
+<span class="sd">    model.bias = model.bias(:) .* ones(model.n.^2,1);</span>
+<span class="sd">    model.bias(~model.goodchannels) = 0.0;</span>
+<span class="sd">    if any(model.bias&lt;0.0),</span>
+<span class="sd">        error(&#39;All observation bias parameters must be positive&#39;);</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % Combine unform and spatially-varying gain parameters</span>
+<span class="sd">    netgain = model.gain * model.inhomogeneous_gain(:);</span>
+<span class="sd">    % Adjust the biases,</span>
+<span class="sd">    adjbias = model.bias(:).^model.gamma;</span>
+<span class="sd">    % and rescale by gains</span>
+<span class="sd">    bias    = adjbias ./ (netgain * model.volume);</span>
+<span class="sd">    % Multiply rates by spatiotemporal volume and dispersion parameter</span>
+<span class="sd">    gain    = netgain * model.volume * model.alpha;</span>
+<span class="sd">    bias(~isfinite(bias))=0.0;</span>
+<span class="sd">    gain(~isfinite(gain))=0.0;</span>
+<span class="sd">    model.adjusted_gain = gain;</span>
+<span class="sd">    model.adjusted_bias = bias;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % precompute operator for nonlocal interactions</span>
+<span class="sd">    minsigma = 1e-2/model.n;</span>
+<span class="sd">    if model.sigma&lt;minsigma,</span>
+<span class="sd">        fprintf(2,&#39;The interaction scale sigma is too small relative to the grid resolution\n&#39;);</span>
+<span class="sd">        fprintf(2,&#39;Implementing sigma %0.2e&lt;%0.2e as a decoupled system\n&#39;,model.sigma,minsigma);</span>
+<span class="sd">        if model.cutoff,</span>
+<span class="sd">            warning(&#39;Cannot use minimum scale cutoff in a system with no interaction scale; disabling&#39;);</span>
+<span class="sd">            model.cutoff==false;</span>
+<span class="sd">        end</span>
+<span class="sd">        % replace interaction kernels with dummy (identity) kernels</span>
+<span class="sd">        model.K2D = eye(model.nn);</span>
+<span class="sd">        model.K1D = eye(model.n);</span>
+<span class="sd">    else</span>
+<span class="sd">        model.K2D = gaussian2DblurOperator(model.n,model.sigma*model.n);</span>
+<span class="sd">        model.K1D = gaussian1DblurOperator(model.n,model.sigma*model.n);</span>
+<span class="sd">    end</span>
+<span class="sd">    model.blur = @(x) reshape(model.K1D*reshape(x,model.n,model.n)*model.K1D&#39;,1,model.nn);</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % These operators are used for faster updates in the moment closure</span>
+<span class="sd">    % code. They extract the quiescent and active subspaces</span>
+<span class="sd">    I  = model.Inn;</span>
+<span class="sd">    O  = zeros(model.nn,model.nn);</span>
+<span class="sd">    model.getQ = [I O];</span>
+<span class="sd">    model.getA = [O I];</span>
+<span class="sd">    for i=1:model.nstates-2,</span>
+<span class="sd">        model.getQ = [model.getQ O];</span>
+<span class="sd">        model.getA = [model.getA O];</span>
+<span class="sd">    end</span>
+<span class="sd">    model.getQ  = model.getQ&#39;;</span>
+<span class="sd">    model.getA  = model.getA&#39;;</span>
+<span class="sd">    model.getKA = (model.K2D*model.getA&#39;)&#39;;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Matrices defining important subspaces of the state space</span>
+<span class="sd">    % Number of individual concentrations to model</span>
+<span class="sd">    model.dimension = model.nstates*model.nn;</span>
+<span class="sd">    % Identity matrix for full model</span>
+<span class="sd">    model.diag = eye(model.nstates*model.nn);</span>
+<span class="sd">    % Subspace reflecting spatial correlatoins and iteractions</span>
+<span class="sd">    model.K2D3 = kron(eye(model.nstates),model.K2D);</span>
+<span class="sd">    % Noise correlations for each reaction transitoin channel</span>
+<span class="sd">    model.K2DT  = kron(eye(model.ntransitions),model.K2D);</span>
+<span class="sd">    % Subspace orthogonal to local neuron count number and spatial correlations</span>
+<span class="sd">    model.state_var_reg = model.K2D3*kron(eye(model.nstates)*model.nstates-ones(model.nstates),model.Inn)*model.K2D3&#39;;</span>
+<span class="sd">    % Subspace orthogonal to spatial correlations</span>
+<span class="sd">    model.count_var_reg = model.K2D3*model.K2D3&#39;;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Prepare matrices used for regularization</span>
+<span class="sd">    % There are model.three subspaces that can be adjusted separately</span>
+<span class="sd">    %</span>
+<span class="sd">    % (1) Conserved regularization: `state_var_reg`</span>
+<span class="sd">    %   Preserves spatial correlation and neuron density. Adds uncertainty</span>
+<span class="sd">    %   only about which state neurons are in.</span>
+<span class="sd">    %</span>
+<span class="sd">    % (2) Non-conserved regularization: `count_var_reg`</span>
+<span class="sd">    %   Preserves spatial correlations but not neuron density.</span>
+<span class="sd">    %</span>
+<span class="sd">    % (3) Diagonal regularization: `diag_var_reg`</span>
+<span class="sd">    %   Reduces spatial correlations. Diagonal (shrinkage) regularization on</span>
+<span class="sd">    %   covariance.</span>
+<span class="sd">    %</span>
+<span class="sd">    % Additive noise regularization matrix (and its Cholesky factor)</span>
+<span class="sd">    % Adds variance only in directions orthogonal to the population count</span>
+<span class="sd">    Reg = model.reg_state_var*model.state_var_reg;</span>
+<span class="sd">    % Adds diagonal variance which incorporates uncertainty about the total count</span>
+<span class="sd">    Reg = Reg + model.reg_count_var*model.count_var_reg;</span>
+<span class="sd">    % Adds diagonal (purely independent) regularization</span>
+<span class="sd">    Reg = Reg + model.reg_diag*model.diag;</span>
+<span class="sd">    % Square-root update uses cholesky factor of regularization noise</span>
+<span class="sd">    Reg = 0.5*(Reg+Reg&#39;);</span>
+<span class="sd">    % Store pre-computed cholesky factor of regularization</span>
+<span class="sd">    % (used in square-root form update)</span>
+<span class="sd">    try</span>
+<span class="sd">        model.regMsqrt = chol(Reg); % x=chol(x)&#39;*chol(x)</span>
+<span class="sd">    catch</span>
+<span class="sd">        % Regulaization singular? Or zero?</span>
+<span class="sd">        model.regMsqrt = Reg;</span>
+<span class="sd">    end</span>
+<span class="sd">    model.reg      = Reg;</span>
+<span class="sd">    % Intermediate value used in covariance update</span>
+<span class="sd">    model.Ireg     = model.diag + model.reg;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Define model reaction system</span>
+
+<span class="sd">    model.Sspatial = kron(model.linearTransitions,eye(model.nn));</span>
+<span class="sd">    % Depends on model.linearRates and model.Rlin</span>
+<span class="sd">    model.Rspatial = kron(model.Rlin,eye(model.nn));</span>
+
+<span class="sd">    % model.noiseCov incorporates</span>
+<span class="sd">    % 1) anti-correlations caused by reactions from one state to another</span>
+<span class="sd">    % 2) spatial correlation from basis overlap (if using scale cutoff)</span>
+<span class="sd">    % 3) scaling by spatial volume of basis functions</span>
+<span class="sd">    % 4) scaling by dt &quot;temporal volume&quot; of integration step size</span>
+<span class="sd">    % If using the cutoff option, the spatial basis functions are</span>
+<span class="sd">    % overlapping gassians determined by the nonlocal interaction kernel</span>
+<span class="sd">    % the full kernel for all states is stored in model.K2DT</span>
+<span class="sd">    % The noise model assigned fluctuations from reactions to covariances</span>
+<span class="sd">    % with correlations determined by the stoichiometry, and with</span>
+<span class="sd">    % additional correlations induced by overlap in the basis functions.</span>
+<span class="sd">    % We precompute this matrix product here.</span>
+<span class="sd">    if model.cutoff,</span>
+<span class="sd">        % Effective system size scalar if we set our minimum spatial scale to match</span>
+<span class="sd">        % the interaction scale for the system. One advantage of using this</span>
+<span class="sd">        % convention is that changing the simulation grid scale will not change</span>
+<span class="sd">        % the underlying system being simulated. In this case the simulation grid</span>
+<span class="sd">        % introduces only discretization error, but the underlying statistical</span>
+<span class="sd">        % field theory is identical. If on the other hand we allow the simulation</span>
+<span class="sd">        % grid to set the minimum scale for the model, then finer simulation grids</span>
+<span class="sd">        % will add higher frequencies into the model. The statistical field theory</span>
+<span class="sd">        % is not valid at scales below the size of single neurons, so too-fine a</span>
+<span class="sd">        % a discretization may lead to invalid behavior. Using a fixed model scale</span>
+<span class="sd">        % set by the excitatory interactions avoids this ambiguity.</span>
+<span class="sd">        assert(model.sigma&gt;minsigma);</span>
+<span class="sd">        model.ss = 2*pi*model.sigma^2.*model.ss_rescale;</span>
+<span class="sd">        model.noiseCov = model.Sspatial*model.K2DT;</span>
+<span class="sd">    else,</span>
+<span class="sd">        % Effective system size scalar if minimum scale is set by the simulation</span>
+<span class="sd">        % grid. (This should typically be finer than the scale of interactions,</span>
+<span class="sd">        % so simulating at this scale is like adding some more high-energy, i.e.</span>
+<span class="sd">        % high spatial frequency, modes into the system. This increases the</span>
+<span class="sd">        % apparent fluctuations. The statistical field theory becomes invalid</span>
+<span class="sd">        % at spatial scales comparable to the size of single neurons, so using</span>
+<span class="sd">        % the LNA at this finier spatial scale is expected to be less accurate.</span>
+<span class="sd">        % This corresponds, effectively, to using a smaller population size,</span>
+<span class="sd">        % which naturally has a larger error term in the system-size expansion)</span>
+<span class="sd">        model.ss = model.dx.*model.ss_rescale;</span>
+<span class="sd">        model.noiseCov = model.Sspatial;</span>
+<span class="sd">        model.noiseCov = sparse(model.noiseCov);</span>
+<span class="sd">    end</span>
+<span class="sd">    % Adjust noise to reflect spatiotemporal basis function volume</span>
+<span class="sd">    % We approximate the noise as the integral over space and time</span>
+<span class="sd">    % of a Poisson random measure, with intensity proportional to the</span>
+<span class="sd">    % reaction rates. `ss` is the system size in the expression below.</span>
+<span class="sd">    % note: ss may need to be replaced by a vector if</span>
+<span class="sd">    % basis functions of different volumes are used</span>
+<span class="sd">    %</span>
+<span class="sd">    % The absolute-value surronding `dt` is there to support (in the future)</span>
+<span class="sd">    % negative time steps. Reversing time for the mean dynamics, while keeping</span>
+<span class="sd">    % positive time for the fluctuations, in a simple way to approximate the</span>
+<span class="sd">    % adjoint operator for the system, which allows for backward filtering.</span>
+<span class="sd">    model.noiseCov = model.noiseCov.*sqrt(abs(model.dt)*model.ss);</span>
+
+<span class="sd">    % Linear contribution to Jacobain (constant in time)</span>
+<span class="sd">    % Depends on model.linearRates and model.Rlin</span>
+<span class="sd">    model.Jlin  = kron(model.Rlin,eye(model.nn)).*model.dt;</span>
+<span class="sd">    % An intermediate calculation in the covariance update</span>
+<span class="sd">    model.IJlin = model.diag - model.Jlin;</span>
+<span class="sd">    % Linear reactions can be integrated forward exactly via exponentiation</span>
+<span class="sd">    % Depends on model.linearRates and model.Rlin</span>
+<span class="sd">    model.Flin = expm(model.Rlin*model.dt);</span>
+<span class="sd">    % Linear reactions can be integrated forward exactly via exponentiation: all spatial locations</span>
+<span class="sd">    model.FlinSpatial = kron(model.Flin,model.Inn);</span>
+<span class="sd">    model.FlinReactionSpatial = kron(model.linearTransitions*diag(model.linearRates),model.Inn)&#39;;</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Construct initial covariance state</span>
+<span class="sd">    C =     model.ini_state_var * model.state_var_reg;</span>
+<span class="sd">    C = C + model.ini_count_var * model.count_var_reg;</span>
+<span class="sd">    C = C + model.ini_reg_diag  * model.diag;</span>
+<span class="sd">    C = 0.5*(C+C&#39;);</span>
+<span class="sd">    try</span>
+<span class="sd">        model.Pini = cinv(C);</span>
+<span class="sd">    catch</span>
+<span class="sd">        display(&#39;System is too large, increase the reg_diag parameter&#39;);</span>
+<span class="sd">        error(&#39;matrix operations suffering from precision loss&#39;);</span>
+<span class="sd">    end</span>
+<span class="sd">    model.Cini = C;</span>
+
+<span class="sd">    if ~isfield(model,&#39;names&#39;),</span>
+<span class="sd">        for i=1:model.nstates,</span>
+<span class="sd">            model.names{i} = sprintf(&#39;State%d&#39;,i);</span>
+<span class="sd">        end</span>
+<span class="sd">    else</span>
+<span class="sd">        if size(model.names,2)~=model.nstates,</span>
+<span class="sd">                size(model.names,2),model.nstates));</span>
+<span class="sd">    end</span>
+
+<span class="sd">    if ~model.cscale,</span>
+<span class="sd">        model.cscale=ones(model.nn*model.nspecies,1);</span>
+<span class="sd">    end</span>
+
+<span class="sd">end</span>
+
+
+
+
+</div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

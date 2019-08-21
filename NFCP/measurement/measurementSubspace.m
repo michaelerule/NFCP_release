@@ -104,24 +104,22 @@ function [loglikelihood,M2,C2,rMa,rPa,rCa] = measurementSubspace(model,M,C,xypoi
     % Estimate of the likelihood
     if model.dolikelihood,
         loglikelihood = logLikelihood(model,M,cinv(C),M2,cinv(C2),y);
-        assert(~isnan(loglikelihood));
         assert(all(isfinite(loglikelihood)));
     else
         loglikelihood = NaN;
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Optional negative-means handling (slow!)
+    % Optional negative-means handling
     if any(M2<0),
-        % Could re-run constrained Laplace update? 
-        % [loglikelihood,pmode,pprec] = measurementLaplace(model,M,P,xypoints)
-        % [loglikelihood,M2,C2,rMa,rPa,rCa] = measurementSubspace(model,M,C,xypoints,srMa,srPa,srCa)
+        % Re-run constrained Laplace update? 
         if model.verbosity>=2,
             fprintf(2,'Subspace update yielded negative intensities; using constrained Laplace.\n');
         end
         [loglikelihood,M2,P2] = measurementLaplace(model,M,cinv(C),xypoints);
         C2 = cinv(P2);
-        %{
+        %{ 
+        % Old version: slower and less accurate!
         % Global correction (considers joint covariance)
         % M2 = nearestPositivePoint(M2,cinv(C2+eye(model.dimension)*model.reg_inverse));
         % Local correction

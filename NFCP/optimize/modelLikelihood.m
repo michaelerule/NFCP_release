@@ -1,4 +1,4 @@
-function ll_total = modelLikelihood(model,ini,xydata,varargin)
+function ll = modelLikelihood(model,ini,xydata,varargin)
     %{
     Log-likelihood function for neural-field cox-process. Wraps the
     `stateInfer` function. 
@@ -62,7 +62,7 @@ function ll_total = modelLikelihood(model,ini,xydata,varargin)
     
     Returns
     -------
-    ll_total : `float`
+    ll : `float`
         log-likelihood of data given model (up to a constant factor)
     %}
     
@@ -71,10 +71,6 @@ function ll_total = modelLikelihood(model,ini,xydata,varargin)
         'doplot'       ,false
         'save_figure'  ,false
         'cache'        ,false
-        'upscale'      ,8    
-        'skipinf'      ,10   
-        'showduration' ,200  
-        'showmaxy'     ,55   
         'showprog'     ,false
         'errorll'      ,-1e60
         'normll'       ,true
@@ -109,34 +105,35 @@ function ll_total = modelLikelihood(model,ini,xydata,varargin)
     % parameters. This value is dithered to avoid singular matrices
     % that can occur in the sparse GP code if too many points have 
     % the same likelihood.
-    ll_total = options.errorll.*(1+(rand()-0.5)*0.1);
+    model.dolikelihood=true;
+    ll = options.errorll.*(1+(rand()-0.5)*0.1);
     if any([model.linearRates(:)' model.thr model.rAA model.dt]<0), 
         printModel(model);
-        fprintf(2,'ll=%0.4e\n',ll_total);
+        fprintf(2,'ll=%0.4e\n',ll);
         warning('Rates, thresholds, and time-steps should be non-negative');
         return;
     end;
-    if any(model.dt.*[model.linearRates(:)' model.rAA]>1.0), 
+    if any(model.dt.*[model.linearRates(:)']>1.0), 
         printModel(model);
-        fprintf(2,'ll=%0.4e\n',ll_total);
+        fprintf(2,'ll=%0.4e\n',ll);
         warning('All rates should be slow relative to time-step model.dt');
         return;
     end;
     if options.catch_errors,
         try
-            [ll_total,infstate,margvar,infe] = stateInfer(ini,model,xydata,false,options);
+            [ll,infstate,margvar,infe] = stateInfer(ini,model,xydata,false,options);
         catch e %e is an MException struct
             printModel(model);
-            fprintf(2,'ll=%0.4e\n',ll_total);
+            fprintf(2,'ll=%0.4e\n',ll);
             fprintf(2,'Identifier:\n%s\n',e.identifier);
             fprintf(2,'Message:\n%s\n',e.message);
             fprintf(2,'%s\n',getReport(e,'extended'));
             fprintf(2,'Continuing, but returning large negative likelihood\n');
         end
     else,
-        [ll_total,infstate,margvar,infe] = stateInfer(ini,model,xydata,false,options);
+        [ll,infstate,margvar,infe] = stateInfer(ini,model,xydata,false,options);
     end
-    fprintf(1,'ll=%0.4e\n',ll_total);
+    fprintf(1,'ll=%0.4e\n',ll);
     printModel(model);
 end
 

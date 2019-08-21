@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>matrix.nearestSPD &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>matrix.nearestSPD</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for matrix.nearestSPD</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<div class="viewcode-block" id="nearestSPD"><a class="viewcode-back" href="../../matrix.nearestSPD.html#matrix.nearestSPD.nearestSPD">[docs]</a><span class="k">def</span> <span class="nf">nearestSPD</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    nearestSPD - the nearest (in Frobenius norm) Symmetric Positive Definite matrix to A</span>
+<span class="sd">    usage: Ahat = nearestSPD(A)</span>
+
+<span class="sd">    From Higham: &quot;The nearest symmetric positive semidefinite matrix in the</span>
+<span class="sd">    Frobenius norm to an arbitrary real matrix A is shown to be (B + H)/2,</span>
+<span class="sd">    where H is the symmetric polar factor of B=(A + A&#39;)/2.&quot;</span>
+
+<span class="sd">    http://www.sciencedirect.com/science/article/pii/0024379588902236</span>
+
+<span class="sd">    Copyright (c) 2013, John D&#39;Errico</span>
+<span class="sd">    All rights reserved.</span>
+
+<span class="sd">    Redistribution and use in source and binary forms, with or without</span>
+<span class="sd">    modification, are permitted provided that the following conditions are</span>
+<span class="sd">    met:</span>
+
+<span class="sd">        * Redistributions of source code must retain the above copyright</span>
+<span class="sd">          notice, this list of conditions and the following disclaimer.</span>
+<span class="sd">        * Redistributions in binary form must reproduce the above copyright</span>
+<span class="sd">          notice, this list of conditions and the following disclaimer in</span>
+<span class="sd">          the documentation and/or other materials provided with the distribution</span>
+
+<span class="sd">    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;</span>
+<span class="sd">    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</span>
+<span class="sd">    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</span>
+<span class="sd">    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE</span>
+<span class="sd">    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</span>
+<span class="sd">    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</span>
+<span class="sd">    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</span>
+<span class="sd">    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</span>
+<span class="sd">    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</span>
+<span class="sd">    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</span>
+<span class="sd">    POSSIBILITY OF SUCH DAMAGE.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : square matrix,</span>
+<span class="sd">        which will be converted to the nearest Symmetric Positive Definite Matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Ahat :</span>
+<span class="sd">        The matrix chosen as the nearest SPD matrix to A.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+
+
+<span class="sd">    if nargin ~= 1</span>
+<span class="sd">      error(&#39;Exactly one argument must be provided.&#39;)</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % test for a square matrix A</span>
+<span class="sd">    [r,c] = size(A);</span>
+<span class="sd">    if r ~= c</span>
+<span class="sd">      error(&#39;A must be a square matrix.&#39;)</span>
+<span class="sd">    elseif (r == 1) &amp;&amp; (A &lt;= 0)</span>
+<span class="sd">      % A was scalar and non-positive, so just return eps</span>
+<span class="sd">      Ahat = eps;</span>
+<span class="sd">      return</span>
+<span class="sd">    end</span>
+
+<span class="sd">    % symmetrize A into B</span>
+<span class="sd">    B = (A + A&#39;)/2;</span>
+
+<span class="sd">    % Compute the symmetric polar factor of B. Call it H.</span>
+<span class="sd">    % Clearly H is itself SPD.</span>
+<span class="sd">    [U,Sigma,V] = svd(B);</span>
+<span class="sd">    H = V*Sigma*V&#39;;</span>
+
+<span class="sd">    % get Ahat in the above formula</span>
+<span class="sd">    Ahat = (B+H)/2;</span>
+
+<span class="sd">    % ensure symmetry</span>
+<span class="sd">    Ahat = (Ahat + Ahat&#39;)/2;</span>
+
+<span class="sd">    % test that Ahat is in fact PD. if it is not so, then tweak it just a bit.</span>
+<span class="sd">    p = 1;</span>
+<span class="sd">    k = 0;</span>
+<span class="sd">    while p ~= 0</span>
+<span class="sd">      [R,p] = chol(Ahat);</span>
+<span class="sd">      k = k + 1;</span>
+<span class="sd">      if p ~= 0</span>
+<span class="sd">        % Ahat failed the chol test. It must have been just a hair off,</span>
+<span class="sd">        % due to floating point trash, so it is simplest now just to</span>
+<span class="sd">        % tweak by adding a tiny multiple of an identity matrix.</span>
+<span class="sd">        mineig = min(eig(Ahat));</span>
+<span class="sd">        Ahat = Ahat + (-mineig*k.^2 + eps(mineig))*eye(size(A));</span>
+<span class="sd">      end</span>
+<span class="sd">    end</span>
+
+
+
+
+
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

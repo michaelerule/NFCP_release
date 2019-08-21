@@ -14,7 +14,7 @@ datadir  = '/home/mer49/Dropbox (Cambridge University)/NFCP_datasets/';
 savefigs  = false;
 showevery = 10; 
 df        = 'P11_binned_100ms_20150219_leptin_retina1_control';
-SRES      = 20; % spatial resolution (10, 15 and 20 are available)
+SRES      = 10; % spatial resolution (10, 15 and 20 are available)
 Nsample   = 5000;
 
 % Locate data file
@@ -41,14 +41,14 @@ model.description = [ ...
 
 %{
 % Incorrect parameters, what happens to the dynamics? 
-model.rAA         = 20;  % Excito-Excitatory interaction strength
-model.thr         = 0.2; % Activation threshold
-model.sigma       = 0.1; % Standard-deviation for excitatory interaction kernel
+model.rAA           = 5;    % Excito-Excitatory interaction strength
+model.thr           = 0.1;  % Activation threshold
+model.sigma         = 0.1;   % Standard-deviation for excitatory interaction kernel
 model.description = [ ...
 %    Q  A  R   rate
     -1  1  0   10.0  % spontaneous excitation 
-     0 -1  1   10.0  % enter slow refractory loop
-     1  0 -1   0.5   % slow refractory recovery
+     0 -1  1   1.8   % enter slow refractory loop
+     1  0 -1   0.025   % slow refractory recovery
      ];
 %}
 
@@ -83,14 +83,13 @@ model.colors        = [0 0 1; % Q: blue
                        1 0 0; % A: red
                        0 1 0];% R: green
 model.names = strsplit('Q A R');
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Set system size rescaling based on effective population size
-model = initializeModel(model);
-model.ss_rescale = 1/effectivepopsize;
 fprintf('model.ss_rescale = %f\n',model.ss_rescale);
 ratescale = model.cscale(2);
 model.names{2} = sprintf('A×%d',ratescale);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set system size rescaling based on effective population size
+model.ss_rescale = 1/effectivepopsize;
 model = initializeModel(model);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -162,7 +161,7 @@ xlim([0,1]);
 xlabel('Occupancy fraction')
 ylabel('Density (normalized)')
 yticks([])
-saveas(gcf,'Sampled_statistics_A.svg');
+if savefigs, saveas(gcf,'Sampled_statistics_A.svg'); end
 
 
 

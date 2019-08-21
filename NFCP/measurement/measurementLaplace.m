@@ -139,7 +139,6 @@ function [loglikelihood,pmode,pprec] = measurementLaplace(model,M,P,xypoints)
     % Estimate of the likelihood
     if model.dolikelihood,
         loglikelihood = logLikelihood(model,M,P,pmode,pprec,y);
-        assert(~isnan(loglikelihood));
         assert(all(isfinite(loglikelihood)));
     else
         loglikelihood = NaN;

@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util.applyOptions &mdash; Neural Field Cox Process 2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Neural Field Cox Process
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../NFCP_init.html">NFCP_init module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assertFilterStability.html">assertFilterStability module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../covarianceUpdate.html">covarianceUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../excitatoryRate.html">excitatoryRate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdate.html">filteringUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filteringUpdateCovariance.html">filteringUpdateCovariance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../initializeModel.html">initializeModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jacobian.html">jacobian module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../matrix.html">matrix package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meanUpdate.html">meanUpdate module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../noiseModel.html">noiseModel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../optimize.html">optimize package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">output package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateInfer.html">stateInfer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stateSample.html">stateSample module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Neural Field Cox Process</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>util.applyOptions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for util.applyOptions</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<div class="viewcode-block" id="applyOptions"><a class="viewcode-back" href="../../util.applyOptions.html#util.applyOptions.applyOptions">[docs]</a><span class="k">def</span> <span class="nf">applyOptions</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">    Convert default arguments into a struct, to create a single convention</span>
+<span class="sd">    for handing optional arguments and `varargin`</span>
+
+<span class="sd">    Default arguments can be passed as sequence of key,value pairs as</span>
+<span class="sd">    in Matlab convention (like plot), or as a struct, or a cell array</span>
+<span class="sd">    with (key,value) pairs.</span>
+
+<span class="sd">    If the optional `verbose` flag is enabled,</span>
+<span class="sd">    this routine will print the values assigned to each argument</span>
+<span class="sd">    as well as whether said value is default or user-supplied</span>
+
+<span class="sd">    There are many conventions for passing optional arguments in Matlab.</span>
+<span class="sd">    The one used by Mathworks is to pass optional arguments via `varagin`</span>
+<span class="sd">    as a 1 x N cell array, as a sequence of key,value entries.</span>
+<span class="sd">    Other reasonable conventions would be to pass options as a list of</span>
+<span class="sd">    key,value pairs in a cell array, or as a struct whose fields are the</span>
+<span class="sd">    defaults.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    defaults: `cell`</span>
+<span class="sd">        Ndefaults x 3 cell array containing a list of key, value, message</span>
+<span class="sd">        tuples.</span>
+<span class="sd">    options: `struct` or `cell`</span>
+<span class="sd">        Optional arguments passed to a function. Most likely the contents</span>
+<span class="sd">        of `varargin`. Can be a struct or cell array. If a cell array, it</span>
+<span class="sd">        should either be a 1x1 cell array containing a struct or a cell</span>
+<span class="sd">        array, or a cell array that is a Noptions x 2 list of key,value</span>
+<span class="sd">        pairs or a 1 x (Noptions*2) sequence of said pairs.</span>
+<span class="sd">    verbose : `bool`, default `false`</span>
+<span class="sd">        Whether to print logging and debugging options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    options : `struct`</span>
+<span class="sd">        Returns a struct with `key`→`value` mapping. Any keys not defined</span>
+<span class="sd">        in the `options` argument will be filled in with default values</span>
+<span class="sd">        from the `defaults` argument.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">pass</span><span class="c1">#SKIPME</span>
+    <span class="sd">&#39;&#39;&#39;#STARTCODE</span>
+
+<span class="sd">    if nargin&lt;3, verbose=false; end</span>
+
+<span class="sd">    if nargin&lt;2,</span>
+<span class="sd">        % The user has omitted the options argument</span>
+<span class="sd">        % This is ok, this function can also be used to convert</span>
+<span class="sd">        % a cell array of kay,value or key,value,message tuples</span>
+<span class="sd">        % into a struct format.</span>
+<span class="sd">        % Initialize options to an empty struct</span>
+<span class="sd">        options = {};</span>
+<span class="sd">    end</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Interpret the options argument.</span>
+<span class="sd">    % Possible cases:</span>
+<span class="sd">    %   Empty cell array (no options set)</span>
+<span class="sd">    %   Cell array containing a single struct entry (passed via varargin)</span>
+<span class="sd">    %   Cell array containing a single cell array (passed via varargin)</span>
+<span class="sd">    %   Cell array noptions x 2 of keys, values</span>
+<span class="sd">    %   Flattened cell array with noptions * 2 entries</span>
+<span class="sd">    %   Struct mapping keys to values</span>
+<span class="sd">    if iscell(options),</span>
+<span class="sd">        % optional arguments appear as cell array.</span>
+<span class="sd">        % This can happen if arguments were passed as varargin,</span>
+<span class="sd">        % in which case we expect a flattened list of key,value</span>
+<span class="sd">        % pairs. It is also possible that the user passed a</span>
+<span class="sd">        % prepared `options` struct or cell array, which would</span>
+<span class="sd">        % appear as a single entry in a {1,1} cell array in a</span>
+<span class="sd">        % function expecting `varargin`.</span>
+<span class="sd">        noptions = numel(options);</span>
+<span class="sd">        if noptions==0,</span>
+<span class="sd">            options = struct;</span>
+<span class="sd">        elseif noptions==1,</span>
+<span class="sd">            options = options{1,1};</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+<span class="sd">    if iscell(options),</span>
+<span class="sd">        % optional arguments appear in cell array</span>
+<span class="sd">        % can be a flat sequence, or list of (key,value) pairs</span>
+<span class="sd">        % convert it to a struct format</span>
+<span class="sd">        structoptions = struct;</span>
+<span class="sd">        [nrow,ncol]   = size(options);</span>
+<span class="sd">        if ncol&gt;2 &amp; ~mod(ncol,2) &amp; nrow==1,</span>
+<span class="sd">            nrow = floor(ncol/2);</span>
+<span class="sd">            ncol = 2;</span>
+<span class="sd">            options = reshape(options,ncol,nrow)&#39;;</span>
+<span class="sd">        end</span>
+<span class="sd">        if ncol~=2,</span>
+<span class="sd">            error(&#39;Options should be struct or list of key,value pairs&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        for i=1:nrow,</span>
+<span class="sd">            [k,v]=options{i,1:end};</span>
+<span class="sd">            structoptions.(k)=v;</span>
+<span class="sd">        end</span>
+<span class="sd">        options = structoptions;</span>
+<span class="sd">    end</span>
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Interpret the defaults argument</span>
+<span class="sd">    if iscell(defaults),</span>
+<span class="sd">        % default arguments provided in cell array format</span>
+<span class="sd">        % expect nargumentx x 2 or narguments x 3 cell array, where</span>
+<span class="sd">        % each row is either (argument name, value) or</span>
+<span class="sd">        % (argument name, value, message)</span>
+<span class="sd">        [ndefaults,ncols] = size(defaults);</span>
+<span class="sd">        if ncols&lt;2 | ncols&gt;3,</span>
+<span class="sd">            error(&#39;Specify defaults as list of key,val or k,v,msg tuples&#39;);</span>
+<span class="sd">        end</span>
+<span class="sd">        % re-pack (key,value) pairs into a cell array</span>
+<span class="sd">        for ii=1:ndefaults,</span>
+<span class="sd">            kv(ii,1:2) = defaults(ii,1:2);</span>
+<span class="sd">        end</span>
+<span class="sd">    elseif isstruct(defaults),</span>
+<span class="sd">        % default argument values provided as struct</span>
+<span class="sd">        % field names are interpreted as argument names</span>
+<span class="sd">        % field values are interpreted as argument values</span>
+<span class="sd">        ndefaults = numel(fieldnames(defaults));</span>
+<span class="sd">        k = fieldnames(defaults);</span>
+<span class="sd">        ncols = 2;</span>
+<span class="sd">        % re-pack (key,value) pairs into a cell array</span>
+<span class="sd">        for ii=1:ndefaults,</span>
+<span class="sd">            kv(ii,1:2) = {k{ii}; defaults.(k{ii})};</span>
+<span class="sd">        end</span>
+<span class="sd">    else</span>
+<span class="sd">        error(&#39;Defaults should be specified as a struct or cell array.&#39;);</span>
+<span class="sd">    end</span>
+
+
+<span class="sd">    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="sd">    % Apply the default values to the provided options</span>
+<span class="sd">    % if provided options are missing keys</span>
+<span class="sd">    for ii=1:ndefaults,</span>
+<span class="sd">        % for every option not supplied by the user,</span>
+<span class="sd">        % set it to the value in defaults</span>
+<span class="sd">        [k,v] = kv{ii,1:2};</span>
+<span class="sd">        mode = &#39;passed &#39;;</span>
+<span class="sd">        if ~isfield(options,k),</span>
+<span class="sd">            options.(k)=v;</span>
+<span class="sd">            mode = &#39;default&#39;;</span>
+<span class="sd">        end</span>
+<span class="sd">        if verbose &amp;&amp; strcmp(mode,&#39;passed &#39;),</span>
+<span class="sd">            m = &#39;&#39;;</span>
+<span class="sd">            if ncols==3, m=defaults{ii,3}; end</span>
+<span class="sd">            valuename = options.(k);</span>
+<span class="sd">            % Matlab is in serious need of better &quot;toString&quot; functionality</span>
+<span class="sd">            toString  = @(var) evalc([&#39;disp(var)&#39;]);</span>
+<span class="sd">            if isnumeric(valuename) || islogical(valuename),</span>
+<span class="sd">                if isscalar(valuename),</span>
+<span class="sd">                    valuename = num2str(valuename);</span>
+<span class="sd">                else,</span>
+<span class="sd">                    x1 = num2str(valuename(1));</span>
+<span class="sd">                    x2 = num2str(valuename(2));</span>
+<span class="sd">                    valuename = sprintf(&#39;%s %s …&#39;,x1,x2);</span>
+<span class="sd">                end</span>
+<span class="sd">            end</span>
+<span class="sd">            if iscell(valuename),</span>
+<span class="sd">                valuename = valuename(:);</span>
+<span class="sd">                valuename = toString(valuename(1:max(numel(valuename),2)));</span>
+<span class="sd">            end</span>
+<span class="sd">            if ~isstring(valuename),</span>
+<span class="sd">                try,</span>
+<span class="sd">                    valuename = toString(valuename);</span>
+<span class="sd">                catch,</span>
+<span class="sd">                    valuename = &#39;?&#39;;</span>
+<span class="sd">                end</span>
+<span class="sd">            end</span>
+<span class="sd">            valuename = strtrim(valuename);</span>
+<span class="sd">            if numel(valuename)&gt;40,</span>
+<span class="sd">                valuename = valuename(:);</span>
+<span class="sd">                valuename = valuename(1:min(numel(valuename),40));</span>
+<span class="sd">                valuename = sprintf(&#39;%s...&#39;,valuename);</span>
+<span class="sd">            end</span>
+<span class="sd">            fprintf(&#39;Using %s options.%s = %s %s\n&#39;,mode,k,valuename,m);</span>
+<span class="sd">        end</span>
+<span class="sd">    end</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span><span class="c1">#STOPCODE</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, M Rule
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
