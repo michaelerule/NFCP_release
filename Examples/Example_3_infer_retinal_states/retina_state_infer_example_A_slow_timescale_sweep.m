@@ -37,8 +37,8 @@ model.description = [ ...
      ];
 
 % Algorithim configuration parameters
-model.dt            = 0.1;  % time interval between observations
-model.n             = SRES; % Simulation grid size
+model.dt            = 0.1;   % time interval between observations
+model.n             = SRES;  % Simulation grid size
 model.cutoff        = true;  % Remove scales finer than interaction radius?
 model.ini_state_var = 1e-0;  % Initial variance in state estimate
 model.reg_state_var = 1e-2;  % Added uncertainty in state 
@@ -52,7 +52,7 @@ model.update        = 'Laplace'; % Measurement update method
 model.minrate       = 1e-6;  % Regularization parameter to avoid zeros
 model.maxiter       = 1000;  % Limit Newton-raphson measurement iterations
 model.tol           = 1e-6;  % Convergence tolerance for Newton-Raphson
-model.verbosity     = 0;     % How many details to print
+model.verbosity     = 0;     % How many logging details to print
 model.safety        = 0;     % Whether to do extra numeric stability checks
 model.alpha         = 1;     % Dispersion paramter, 1=Poisson
 effectivepopsize    = 100;   % Effective population size for scaling noise
@@ -109,23 +109,77 @@ ini = [U*0.7 U*0 U*0.3];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Coordinate sweep the slow R->Q rate
 
+START = 1900;
+STOP  = 4000;
 model.update     = 'Laplace'; % Measurement update method
 model.likemethod = 'ELBO'; K=1;
-Nscan  = 49;
-rrates = 10.^linspace(-3,0,Nscan)
-obj    = @(m) modelLikelihood(m,ini,xydata(:,1900:4000));
+
+figure(6); clf;
+
+
+Nscan  = 4*12+1;
+rrates = 10.^linspace(-3,1,Nscan);
+obj    = @(m) modelLikelihood(m,ini,xydata(:,START:STOP));
 par2m  = @(r) initializeModel(applyOptions(model,{'linearRates',[0 model.linearRates(2) r]},false));
-all_ll = {};
-parfor i=1:Nscan, all_ll{i} = obj(par2m(rrates(i))); end
-all_ll = reshape(cell2mat(all_ll),K,Nscan);
+all_lr = {};
+parfor i=1:Nscan, all_lr{i} = obj(par2m(rrates(i))); end
+all_lr = reshape(cell2mat(all_lr),K,Nscan);
+save('RQ_ll.mat','all_lr');
 
-cla;
-semilogx(rrates,all_ll); hold on;
-fprintf(1,'Optimal rate is %f\n',rrates(argmax(all_ll)));
+subplot(221); cla;
+llb2 = log2(exp(all_lr));%.*rrates.*log(10));
+semilogx(rrates,llb2-max(llb2)); hold on;
+fprintf(1,'Optimal rate is %f\n',rrates(argmax(all_lr)));
+[llmax,iimax] = max(all_lr);
+best = rrates(iimax); 
+xline(rrates(iimax));
+fprintf(1,'Optimal rate is %f\n',best);
+xlabel('R→Q rate (transitions/s)');
+ylabel('log_2(likelihood) + const. (bits/sample)');
+ylim([-7,1])
 
-% lr = log10(rrates);
-% p = polyfit(lr(10:end-10),all_ll(10:end-10),2)
-% semilogx(rrates,p(1).*lr.^2+p(2).*lr+p(3));
+
+
+Nscan  = 4*10+1;
+qrates = 10.^linspace(-2,2,Nscan);
+obj    = @(m) modelLikelihood(m,ini,xydata(:,START:STOP));
+par2m  = @(q) initializeModel(applyOptions(model,{'linearRates',[0 q model.linearRates(3)]},false));
+all_lq = {};
+parfor i=1:Nscan, all_lq{i} = obj(par2m(qrates(i))); end
+all_lq = reshape(cell2mat(all_lq),K,Nscan);
+save('AR_ll.mat','all_lq');
+
+subplot(222); cla;
+llb2 = log2(exp(all_lq));%.*rrates.*log(10));
+semilogx(qrates,llb2-max(llb2)); hold on;
+best = qrates(argmax(all_lq));
+xline(best);
+fprintf(1,'Optimal rate is %f\n',best);
+xlabel('A→R rate (transitions/s)');
+ylabel('log_2(likelihood) + const. (bits/sample)');
+ylim([-7,1])
+
+
+
+Nscan  = 4*2+1;
+arates = 10.^linspace(-2,2,Nscan);
+obj    = @(m) modelLikelihood(m,ini,xydata(:,START:STOP));
+par2m  = @(a) initializeModel(applyOptions(model,{'rAA',a},false));
+all_la = {};
+parfor i=1:Nscan, all_la{i} = obj(par2m(arates(i))); end
+all_la = reshape(cell2mat(all_la),K,Nscan);
+save('QA_ll.mat','all_la');
+
+subplot(223); cla;
+llb2 = log2(exp(all_la));%.*rrates.*log(10));
+semilogx(arates,llb2-max(llb2)); hold on;
+best = arates(argmax(all_la));
+xline(best);
+fprintf(1,'Optimal rate is %f\n',best);
+xlabel('QA→AA rate (transitions/s/cell)');
+ylabel('log_2(likelihood) + const. (bits/sample)');
+ylim([-7,1])
+
 
 
 
