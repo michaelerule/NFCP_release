@@ -8,7 +8,7 @@ NFCP_init
 % (Contact mrule7404@gmail.com for a copy of NFCP_datasets)
 % Here is a dropbox share link (current as of 2019/08/18)
 % https://www.dropbox.com/sh/apifkoowouvq2jc/AABLysnAJWs1YY2fmB4HKVRWa?dl=0
-datadir  = '/home/mer49/Dropbox (Cambridge University)/NFCP_datasets/';
+datadir  = '/home/mer49/Dropbox (Cambridge University)/Datasets/NFCP_datasets/';
 
 % Script options
 SRES      = 10; % spatial resolution (10, 15 and 20 are available)
@@ -39,9 +39,7 @@ model.description = [ ...
 % Algorithim configuration parameters
 model.dt            = 0.1;  % time interval between observations
 model.n             = SRES; % Simulation grid size
-model.update        = 'Laplace-subspace'; % Measurement update method
-model.minrate       = 1e-6;  % Regularization parameter to avoid zeros
-model.cutoff        = true; % Remove scales finer than interaction radius?
+model.cutoff        = true;  % Remove scales finer than interaction radius?
 model.ini_state_var = 1e-0;  % Initial variance in state estimate
 model.reg_state_var = 1e-2;  % Added uncertainty in state 
 model.ini_count_var = 0;     % Initial variance for neuron count
@@ -50,7 +48,10 @@ model.reg_inverse   = 1e-12; % Diagonal regularizer for matrix inversions
 model.ini_reg_diag  = 1e-12; % Initial variance added to diagonal
 model.reg_diag      = 1e-12; % Added diagonal regularizaer
 model.reg_precision = 1e-12; % Regularization for precision matrix
-model.maxiter       = 25;    % Limit Newton-raphson measurement iterations
+model.update        = 'Laplace'; % Measurement update method
+model.minrate       = 1e-6;  % Regularization parameter to avoid zeros
+model.maxiter       = 1000;  % Limit Newton-raphson measurement iterations
+model.tol           = 1e-6;  % Convergence tolerance for Newton-Raphson
 model.verbosity     = 0;     % How many details to print
 model.safety        = 0;     % Whether to do extra numeric stability checks
 model.alpha         = 1;     % Dispersion paramter, 1=Poisson
@@ -121,9 +122,10 @@ all_ll = reshape(cell2mat(all_ll),K,Nscan);
 cla;
 semilogx(rrates,all_ll); hold on;
 fprintf(1,'Optimal rate is %f\n',rrates(argmax(all_ll)));
-lr = log10(rrates);
-p = polyfit(lr(10:end-10),all_ll(10:end-10),2)
-semilogx(rrates,p(1).*lr.^2+p(2).*lr+p(3));
+
+% lr = log10(rrates);
+% p = polyfit(lr(10:end-10),all_ll(10:end-10),2)
+% semilogx(rrates,p(1).*lr.^2+p(2).*lr+p(3));
 
 
 

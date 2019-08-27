@@ -2,6 +2,6 @@ stateInfer module
 =================
 
 .. automodule:: stateInfer
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
+    :undoc-members:
+    :show-inheritance:

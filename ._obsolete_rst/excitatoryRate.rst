@@ -2,6 +2,6 @@ excitatoryRate module
 =====================
 
 .. automodule:: excitatoryRate
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
+    :undoc-members:
+    :show-inheritance:
