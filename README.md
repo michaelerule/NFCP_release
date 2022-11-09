@@ -1,5 +1,4 @@
-# NFCP_release
-
+# NFCP
 
 Neural Field Cox Process: a statistical field model of spatiotemporal neural point-processes applied to large scale population recordings.
 
