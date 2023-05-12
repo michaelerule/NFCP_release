@@ -1,6 +1,8 @@
-# Neural field models for latent state inference: Application to large-scale neuronal recordings
+# Neural field models for latent state inference: *Application to large-scale neuronal recordings*
 
 Rule, M. E., Schnoerr, D., Hennig, M. H., & Sanguinetti, G. (2019). Neural field models for latent state inference: Application to large-scale neuronal recordings. [PLOS Computational Biology](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007442), 15(11), e1007442. [doi:  https://doi.org/10.1371/journal.pcbi.1007442]( https://doi.org/10.1371/journal.pcbi.1007442).
+
+![](https://github.com/michaelerule/NFCP_release/blob/master/pcbi.1007442.g003.png?raw=true)
 
 ### Abstract
 
